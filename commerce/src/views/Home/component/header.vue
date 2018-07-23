@@ -2,7 +2,9 @@
  <div class="header">
     <div class="header-cont">
         <div class="left">
-            <img src="http://imooc.51purse.com/static/logo1.png" alt="">
+            <router-link to="/">
+                <img src="http://imooc.51purse.com/static/logo1.png" alt="">
+            </router-link>
         </div>
         <div class="right">
             <span class="userName">用户名</span>
@@ -33,31 +35,31 @@ export default {
     .header
         background:#fff;
         width :100%;
-        padding-bottom :1.2rem;
+        padding-bottom :1.6rem;
         height :0;
         overflow :hidden
         display :flex;
         justify-content :center;
         .header-cont
-            height :1.2rem;
+            height :1.6rem;
             width :80%;
             display :flex;
             justify-content :space-between;
             .left img
                 height :100%;
-            .right 
+            .right
                 font-family: moderat,sans-serif;
                 position :relative;
             .right .userName
                 display :none;
                 color :#333;
-                line-height :1.2rem;
+                line-height :1.6rem;
                 font-size :0.32rem;
                 font-weight :500;
             .right .login
                 cursor:pointer;
                 color :#333;
-                line-height :1.2rem;
+                line-height :1.6rem;
                 font-size :0.32rem;
                 font-weight :500;
             .right .shopCar
@@ -80,7 +82,7 @@ export default {
                 text-align :center;
                 font-size :0.25rem;
                 position :absolute;
-                top:0.25rem;
+                top:0.35rem;
                 right :-0.15rem;
 
 </style>
