@@ -3,6 +3,7 @@
     <headers></headers>
     <nav-cont></nav-cont>
     <sort-price></sort-price>
+    <goods-list></goods-list>
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import Headers from "@/views/Home/component/header.vue"
 import NavCont from "@/views/Home/component/NavCont.vue"
 import SortPrice from "@/views/Home/component/SortPrice.vue"
+import GoodsList from "@/views/Home/component/goodsList.vue"
 export default {
   data(){
     return {
@@ -19,7 +21,8 @@ export default {
   components:{
     Headers:Headers,
     NavCont:NavCont,
-    SortPrice:SortPrice
+    SortPrice:SortPrice,
+    GoodsList:GoodsList
   }
 }
 </script>
