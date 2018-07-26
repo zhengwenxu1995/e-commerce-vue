@@ -24,6 +24,7 @@ export default {
 
       }
     }
+    
 }
 </script>
 
@@ -45,5 +46,7 @@ export default {
                 color:#ee7a23;
             .price
                 color:#333;
+            .price:hover
+                color:#ee7a23;
 </style>
 

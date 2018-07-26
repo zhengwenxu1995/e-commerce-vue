@@ -1,0 +1,36 @@
+{
+    "status": "500",
+    "msg": "",
+    "result": [{
+            "productId": "10001",
+            "productName": "自拍杆",
+            "productPrice": "93.00",
+            "product": "static/img/zipai.jpg"
+        },
+        {
+            "productId": "10002",
+            "productName": "蓝牙耳机",
+            "productPrice": "93.00",
+            "product": "static/img/2.jpg"
+        },
+        {
+            "productId": "10003",
+            "productName": "音响",
+            "productPrice": "93.00",
+            "product": "static/img/1.jpg"
+        },
+        {
+            "productId": "10004",
+            "productName": "运动耳机",
+            "productPrice": "93.00",
+            "product": "static/img/3.jpg"
+        },
+        {
+            "productId": "10005",
+            "productName": "自拍杆",
+            "productPrice": "93.00",
+            "product": "static/img/zipai.jpg"
+        }
+
+    ]
+}

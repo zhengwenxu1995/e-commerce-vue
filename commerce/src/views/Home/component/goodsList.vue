@@ -4,25 +4,22 @@
         <div class="goods-price">
             <dl>
                 <dt class="title">PRICE(单价范围):</dt>
-                <dd><a class="select">All(全部):</a></dd>
-                <dd><a>0.00 - 100.00</a></dd>
-                <dd><a>100.00 - 500.00</a></dd>
-                <dd><a>500.00 - 1000.00</a></dd>
-                <dd><a>1000.00 - 2000.00</a></dd>
+                <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPrice='all'" href="javascript:void(0)">All(全部):</a></dd>
+                <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPrice=index">{{items.startPrice}} - {{items.endPrice}}</a></dd>
             </dl>
         </div>
         <div class="goods-list">
-           <div class="goods-pos">
+           <div class="goods-pos" v-for="item of goodsList" :key="item.productId">
                 <div class="goods-show">
                     <a href="#">
                         <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
+                            <img v-lazy="item.product" alt="">
                         </div>
                         <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
+                            <h3 class="goods-title">{{item.productName}}</h3>
                             <p>
                                 <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
+                                <span   class="money">{{item.productPrice}}</span>
                             </p>
                             <div class="addShopCar">
                                 加入购物车
@@ -30,127 +27,7 @@
                         </div>
                     </a>
                 </div>
-           </div>
-
-            <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
-
-            <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
-
-           <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
-
-           <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
-
-           <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
-
-           <div class="goods-pos">
-                <div class="goods-show">
-                    <a href="#">
-                        <div class="goods-img">
-                            <img src="static/img/zipai.jpg" alt="">
-                        </div>
-                        <div class="goods-info">
-                            <h3 class="goods-title">自拍杆</h3>
-                            <p>
-                                <em class="rmb">￥</em>
-                                <span   class="money">93.00</span>
-                            </p>
-                            <div class="addShopCar">
-                                加入购物车
-                            </div>
-                        </div>
-                    </a>
-                </div>
-           </div>
+           </div>            
         </div>
     </div>
     
@@ -161,7 +38,33 @@
 export default {
   GoodsList: "GoodsList",
   data() {
-    return {};
+    return {
+        priceList:[
+            {
+                startPrice:"0.00",
+                endPrice:"100.00"
+            },
+            {
+                 startPrice:"100.00",
+                endPrice:"500.00"
+            },
+            {
+                startPrice:"500.00",
+                endPrice:"1000.00"
+            },
+            {
+                startPrice:"1000.00",
+                endPrice:"2000.00"
+            }
+        ],
+        checkPrice:"all"
+    };
+  },
+  props:{
+      goodsList:Array
+  },
+  methods:{
+
   }
 };
 </script>
@@ -230,7 +133,12 @@ export default {
              border:2px solid $nowSelect;
           .goods-show a
             color:#333;
+            .goods-img
+                height :0;
+                padding-bottom :4.65rem;
+                overflow :hidden;
             .goods-img img
+                height :4.65rem;
                 width 100%;
             .goods-info
                 padding:0.29rem 0.2rem;
