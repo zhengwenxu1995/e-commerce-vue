@@ -23,13 +23,14 @@ export default {
   },
   methods:{
     homeInfo(){
-      axios.get("/api/goods.json").then(this.success);
+      axios.get("/goods").then(this.success);
     },
     success(res){
+      console.log(res)
       let resl=res.data;
-      if(resl.status=="500" && resl.result!=null){
+      if(resl.status=="200" && resl.result!=null){
           this.goodsList=resl.result;
-          console.log(this.goodsList);
+          // console.log(this.goodsList)
       }
     }     
   },

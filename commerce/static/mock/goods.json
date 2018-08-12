@@ -1,36 +1,125 @@
 {
-    "status": "500",
-    "msg": "",
-    "result": [{
+    "status":"200",
+    "result":[
+        {
             "productId": "10001",
             "productName": "自拍杆",
-            "productPrice": "93.00",
+            "productPrice": "39.00",
             "product": "static/img/zipai.jpg"
-        },
+        }, 
         {
             "productId": "10002",
-            "productName": "蓝牙耳机",
-            "productPrice": "93.00",
-            "product": "static/img/2.jpg"
+            "productName": "智能插线板",
+            "productPrice": "59.00",
+            "product": "static/img/6.jpg"
         },
         {
             "productId": "10003",
-            "productName": "音响",
-            "productPrice": "93.00",
-            "product": "static/img/1.jpg"
+            "productName": "运动耳机-3",
+            "productPrice": "80.00",
+            "product": "static/img/2.jpg"
         },
         {
             "productId": "10004",
-            "productName": "运动耳机",
-            "productPrice": "93.00",
-            "product": "static/img/3.jpg"
+            "productName": "智能摄像头",
+            "productPrice": "389.00",
+            "product": "static/img/photo.jpg"
         },
         {
             "productId": "10005",
-            "productName": "自拍杆",
-            "productPrice": "93.00",
+            "productName": "头戴式耳机Ear700",
+            "productPrice": "700.00",
+            "product": "static/img/3.jpg"
+        },
+        {
+            "productId": "10006",
+            "productName": "IH 电饭煲",
+            "productPrice": "999.00",
+            "product": "static/img/9.jpg"
+        },
+        {
+            "productId": "10007",
+            "productName": "运动耳机 Ear1000",
+            "productPrice": "759.00",
+            "product": "static/img/11.jpg"
+        },
+		{
+            "productId": "10008",
+            "productName": "运动耳机 Ear1000",
+            "productPrice": "759.00",
+            "product": "static/img/2.jpg"
+        },
+		{
+            "productId": "10009",
+            "productName": "头戴式耳机 Ear1100",
+            "productPrice": "1099.00",
+            "product": "static/img/12.jpg"
+        },
+		{
+            "productId": "10010",
+            "productName": "数据线 Ear1000",
+            "productPrice": "100.00",
+            "product": "static/img/15.jpg"
+        },
+		{
+            "productId": "10011",
+            "productName": "蓝牙音箱 Ear1600",
+            "productPrice": "1600.00",
+            "product": "static/img/13.jpg"
+        },
+		{
+            "productId": "10012",
+            "productName": "蓝牙音箱 Ear1400",
+            "productPrice": "1600.00",
             "product": "static/img/zipai.jpg"
+        },
+		{
+            "productId": "10013",
+            "productName": "平衡车",
+            "productPrice": "1999.00",
+            "product": "static/img/pingheng.jpg"
+        },
+		{
+            "productId": "10014",
+            "productName": "小米空气净化器",
+            "productPrice": "1899.00",
+            "product": "static/img/8.jpg"
+        },
+		{
+            "productId": "10015",
+            "productName": "Ear2000",
+            "productPrice": "2000.00",
+            "product": "static/img/14.jpg"
+        },
+		{
+            "productId": "10016",
+            "productName": "小米电视 4A",
+            "productPrice": "2099.00",
+            "product": "static/img/10.jpg"
+        },
+		{
+            "productId": "10017",
+            "productName": "小米6手机",
+            "productPrice": "2499.00",
+            "product": "static/img/mi6.jpg"
+        },
+		{
+            "productId": "10018",
+            "productName": "小米笔记本 Pro",
+            "productPrice": "3599.00",
+            "product": "static/img/note.jpg"
+        },
+		{
+            "productId": "10019",
+            "productName": "小钢炮蓝牙音箱",
+            "productPrice": "159.00",
+            "product": "static/img/1.jpg"
+        },
+		{
+            "productId": "10020",
+            "productName": "移动电源",
+            "productPrice": "606.00",
+            "product": "static/img/5.jpg"
         }
-
     ]
 }
