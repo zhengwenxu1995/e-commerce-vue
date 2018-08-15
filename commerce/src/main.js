@@ -6,10 +6,11 @@ import router from './router'
 import "@/assets/style/reset.css"
 import "@/assets/style/iconfont.css"
 import VueLazyload from "vue-lazyload"
+import infiniteScroll from "vue-infinite-scroll"
 
 Vue.config.productionTip = false
 
-
+Vue.use(infiniteScroll)
 Vue.use(VueLazyload, {
         loading: "/static/loading-svg/loading-bars.svg"
     })
