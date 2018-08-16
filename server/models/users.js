@@ -1,19 +1,20 @@
-let mongoos=require("mongoose");
+let mongoose=require("mongoose");
 let Schema=mongoose.Schema;
 
 //创建表模型
-let userssChema=new Schema({
+let usersSchema=new Schema({
     "userId":String,
     "userName":String,
     "userPwd":String,
-    "orderList":[],
+    "orderList":Array,
     "carList":[
         {
             "productId":String,
             "productName":String,
             "salePrice":Number,
             "checked":Number,
-            "productNum":Number
+            "productNum":Number,
+            "productImage":String
          }
     ],
     "addressList":[
@@ -28,4 +29,4 @@ let userssChema=new Schema({
     ]
 });
 
-module.exports= mongoos.model("User",usersSchema);
+module.exports= mongoose.model("User",usersSchema);

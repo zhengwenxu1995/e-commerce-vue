@@ -33,9 +33,9 @@
                   <div class="goods-list-cont">
                       <div class="goods-pos" v-for="item of goodsList" :key="item.productId">
                           <div class="goods-show">
-                              <a href="#">
+                              <a href="javascript:void(0)" >
                                   <div class="goods-img">
-                                      <img v-lazy="item.product" alt="">
+                                      <img v-lazy="item.productImage" alt="">
                                   </div>
                                   <div class="goods-info">
                                       <h3 class="goods-title">{{item.productName}}</h3>
@@ -160,9 +160,10 @@ export default {
     },
     //加入购物车
     addShopCar (productId){
-      axios.post("/goods/addShopCar",{
-         productId:productId
-       }).then((res)=>{
+      let addShopCarParam={
+        productId:productId
+      }
+      axios.post("/goods/addShopCar",addShopCarParam).then((res)=>{
          
        })
       console.log(productId)

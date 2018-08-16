@@ -4,8 +4,7 @@ var mongoose= require("mongoose");
 //商品展示  goods.js
 var Goods = require("../models/goods.js");
 
-//用户模块 user.js
-var user = require("../models/users.js")
+
 
 //连接mongdb数据库  使用mongoose的驱动  使用mongodb自带的驱动也可以
 mongoose.connect("mongodb://127.0.0.1:27017/commerce");
@@ -86,7 +85,58 @@ router.get("/",function (request,response,next){
 
 
 //加入购物车
-router.post
+router.post("/addShopCar",function (request,response,next){
+    //用户模块 user.js
+    var User = require("../models/users.js")
+    let userId="a0001";
+    let productId=request.body.productId;
+    User.findOne({"userId":"a0001"},function (error1,userDoc){
+        if(error1){
+            response.json({
+                status:404,
+                msg:error1.message,
+            })
+        }else{
+            if(userDoc){
+                Goods.findOne({"productId":productId},function (error2,goodsDoc1){
+                    if(error2){
+                        response.json({
+                            status:404,
+                            msg:error2.message,
+                        })
+                    }else{
+                        if(goodsDoc1){
+                            goodsDoc1.checked=1;
+                            goodsDoc1.productNum=1;
+                            User.cartList.push(goodsDoc1);
+                            User.save(function (error3,shopCarDoc){
+                                if(error3){
+                                    response.json({
+                                        status:404,
+                                        msg:error3.message,
+                                    });
+                                }else{
+                                    response.json({
+                                        status:200,
+                                        msg:"ok",
+                                        result:"success"
+                                    });
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+            
+        }
+
+
+
+
+    })
+    
+    
+})
 
 
 

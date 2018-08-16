@@ -6,7 +6,7 @@ var productSchema=new Schema({
     "productId": String,
     "productName": String,
     "productPrice": Number,
-    "product": String
+    "productImage": String
 });
 
 
