@@ -25,8 +25,8 @@
               <div class="goods-price">
                   <dl>
                       <dt class="title">PRICE(单价范围):</dt>
-                      <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPrice='all'" href="javascript:void(0)">All(全部):</a></dd>
-                      <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPrice=index">{{items.startPrice}} - {{items.endPrice}}</a></dd>
+                      <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPriceInterval('all')" href="javascript:void(0)">All(全部):</a></dd>
+                      <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPriceInterval(index)">{{items.startPrice}} - {{items.endPrice}}</a></dd>
                   </dl>
               </div>
               <div class="goods-list">
@@ -43,7 +43,7 @@
                                           <em class="rmb">￥</em>
                                           <span class="money">{{item.productPrice}}.00</span>
                                       </p>
-                                      <div class="addShopCar">
+                                      <div class="addShopCar" @click="addShopCar(item.productId)">
                                           加入购物车
                                       </div>
                                   </div>
@@ -52,7 +52,7 @@
                       </div>     
                   </div> 
                   <div class="loadScroll" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
-                      <img src="static/loading-svg/loading-bubbles.svg"  >
+                      <img v-if="showLoading" src="static/loading-svg/loading-bubbles.svg"  >
                   </div>
               </div>
           </div>
@@ -70,6 +70,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      showLoading:false,
       goodsList: [],
       sort: -1,
       page: 1,
@@ -89,7 +90,7 @@ export default {
         },
         {
           startPrice: "1000.00",
-          endPrice: "2000.00"
+          endPrice: "5000.00"
         }
       ],
       checkPrice: "all",
@@ -100,18 +101,21 @@ export default {
   methods: {
     //获取数据 
     homeInfo(flot){
+      //this.showLoading=true;
       let param = {
         sort: this.sort,
         page: this.page,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        checkPrice:this.checkPrice
       };
+      this.showLoading=true;
       axios.get("/goods", {
           params: param
         }).then((res)=> {
-          console.log(res.data)
           let resl = res.data;
+          this.showLoading=false;
           if (resl.status == "200" && resl.result != null) {
-            if(true){
+            if(flot){
               this.goodsList=this.goodsList.concat(resl.result);
               this.busy=false;
               if(resl.count<8){
@@ -128,9 +132,8 @@ export default {
           }
       })
     },
-
     //懒加载   事件
-    loadMore() {
+    loadMore() { 
       this.busy = true;
       setTimeout(() => {
         this.page++;
@@ -142,10 +145,27 @@ export default {
       this.arrowSort = !this.arrowSort;
       if (this.arrowSort) {
         this.sort = 1;
+        this.page=1;
       } else {
         this.sort = -1;
+        this.page=1;
       }
       this.homeInfo();
+    },
+    //选择单价区间
+    checkPriceInterval(index){
+      this.checkPrice=index;
+      this.page=1;
+      this.homeInfo();
+    },
+    //加入购物车
+    addShopCar (productId){
+      axios.post("/goods/addShopCar",{
+         productId:productId
+       }).then((res)=>{
+         
+       })
+      console.log(productId)
     }
   },
   mounted() {

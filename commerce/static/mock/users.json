@@ -1,25 +1,32 @@
-{
-    "userId":"String",
-    "userName":"String",
-    "userPwd":"String",
-    "orderList":"Array",
-    "cartList":[
+{ 
+    "userId" : "10001", 
+    "userName" : "admin", 
+    "userPwd" : "admin", 
+    "orderList" : [
         {
-            "productId":"String",
-            "productName":"String",
-            "salePrice":"String",
-            "checked":"String",
-            "productNum":"String"
+            "orderId" : "id值", 
+            "orderTotal" : "1600", 
+            "orderStatus" : 1.0, 
+            "createrDate" : 2014.0
         }
-    ],
-    "addressList":[
+    ], 
+    "cartList" : [
         {
-            "addressId":"String",
-            "userName":"String",
-            "srteetName":"String",
-            "postCode":"Number",
-            "tel":"Number",
-            "isDefault":"Boolean"
+            "productId" : "String", 
+            "productName" : "String", 
+            "salePrice" : "String", 
+            "checked" : "String", 
+            "productNum" : "String"
+        }
+    ], 
+    "addressList" : [
+        {
+            "addressId" : "String", 
+            "userName" : "String", 
+            "srteetName" : "String", 
+            "postCode" : "Number", 
+            "tel" : "Number", 
+            "isDefault" : "Boolean"
         }
     ]
 }
