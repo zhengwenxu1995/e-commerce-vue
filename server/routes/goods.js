@@ -90,7 +90,7 @@ router.post("/addShopCar",function (request,response,next){
     var User = require("../models/users.js")
     let userId="a0001";
     let productId=request.body.productId;
-    User.findOne({"userId":"a0001"},function (error1,userDoc){
+    User.findOne({"userId":userId},function (error1,userDoc){
         if(error1){
             response.json({
                 status:404,
@@ -98,34 +98,66 @@ router.post("/addShopCar",function (request,response,next){
             })
         }else{
             if(userDoc){
-                Goods.findOne({"productId":productId},function (error2,goodsDoc1){
-                    if(error2){
-                        response.json({
-                            status:404,
-                            msg:error2.message,
-                        })
-                    }else{
-                        if(goodsDoc1){
-                            goodsDoc1.checked=1;
-                            goodsDoc1.productNum=1;
-                            User.cartList.push(goodsDoc1);
-                            User.save(function (error3,shopCarDoc){
-                                if(error3){
-                                    response.json({
-                                        status:404,
-                                        msg:error3.message,
-                                    });
-                                }else{
-                                    response.json({
-                                        status:200,
-                                        msg:"ok",
-                                        result:"success"
-                                    });
-                                }
-                            })
-                        }
+                //如果购物车里面有的话 productNum 执行++
+                let goodsItem="";
+                userDoc.carList.forEach((item) => {
+                    if(item.productId==productId){
+                        item.productNum++;
+                        goodsItem=item;
                     }
-                })
+                });
+                if(goodsItem){
+                    userDoc.save(function (error3,shopCarDoc){
+                        if(error3){
+                            response.json({
+                                status:404,
+                                msg:error3.message,
+                            });
+                        }else{
+                            response.json({
+                                status:200,
+                                msg:"ok",
+                                result:"success"
+                            });
+                        }
+                    })
+                }else{
+                    Goods.findOne({"productId":productId},function (error2,goodsDoc1){
+                        if(error2){
+                            response.json({
+                                status:404,
+                                msg:error2.message,
+                            })
+                        }else{
+                            if(goodsDoc1){
+                                let newGoods={
+                                    checked:1,
+                                    productNum:1,
+                                    productId: goodsDoc1.productId,
+                                    productName: goodsDoc1.productName,
+                                    productPrice: goodsDoc1.productPrice,
+                                    productImage: goodsDoc1.productImage
+                                }
+                                userDoc.carList.push(newGoods);
+                                userDoc.save(function (error3,shopCarDoc){
+                                    if(error3){
+                                        response.json({
+                                            status:404,
+                                            msg:error3.message,
+                                        });
+                                    }else{
+                                        response.json({
+                                            status:200,
+                                            msg:"ok",
+                                            result:"success"
+                                        });
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+                
             }
             
         }

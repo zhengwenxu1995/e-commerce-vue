@@ -164,9 +164,15 @@ export default {
         productId:productId
       }
       axios.post("/goods/addShopCar",addShopCarParam).then((res)=>{
-         
+        let data=res.data;
+        if(data.result=="success"){
+          alert("添加成功")
+        }else{
+          alert("添加失败")
+        }
+        
        })
-      console.log(productId)
+      // console.log(productId)
     }
   },
   mounted() {
