@@ -20,6 +20,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req,res,next)=>{
+  //console.log(req.cookies.userId)
+  if(req.cookies.userId){
+    next();
+  }else{
+    if(req.originalUrl=="/users/userlogin" || req.originalUrl=="/users/loginstatus" || req.originalUrl=="/users/outlogin" || req.path=="/goods"){
+      next();
+    }else{
+      res.json({
+        status:"200",
+        msg:"当前没有登陆！！",
+        result:""
+      })
+    }
+  }
+})
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/goods', usergoods);

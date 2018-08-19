@@ -95,6 +95,7 @@ router.post("/addShopCar",function (request,response,next){
             response.json({
                 status:404,
                 msg:error1.message,
+                relute:""
             })
         }else{
             if(userDoc){
@@ -112,11 +113,12 @@ router.post("/addShopCar",function (request,response,next){
                             response.json({
                                 status:404,
                                 msg:error3.message,
+                                relute:""
                             });
                         }else{
                             response.json({
                                 status:200,
-                                msg:"ok",
+                                msg:"添加成功",
                                 result:"success"
                             });
                         }
@@ -127,6 +129,7 @@ router.post("/addShopCar",function (request,response,next){
                             response.json({
                                 status:404,
                                 msg:error2.message,
+                                relute:""
                             })
                         }else{
                             if(goodsDoc1){
@@ -148,7 +151,7 @@ router.post("/addShopCar",function (request,response,next){
                                     }else{
                                         response.json({
                                             status:200,
-                                            msg:"ok",
+                                            msg:"添加成功",
                                             result:"success"
                                         });
                                     }

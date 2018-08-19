@@ -1,6 +1,6 @@
 <template>
   <div>
-    <headers></headers>
+    <headers v-bind:showStatus="showStatus"></headers>
     <nav-cont><span slot="navShow">Goods</span></nav-cont>
     <div class="sort">
       <div class="sort-cont">
@@ -18,46 +18,64 @@
           </div>
       </div>
     </div>
-
-
-      <div class="goods">
-          <div class="good-cont">
-              <div class="goods-price">
-                  <dl>
-                      <dt class="title">PRICE(单价范围):</dt>
-                      <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPriceInterval('all')" href="javascript:void(0)">All(全部):</a></dd>
-                      <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPriceInterval(index)">{{items.startPrice}} - {{items.endPrice}}</a></dd>
-                  </dl>
-              </div>
-              <div class="goods-list">
-                  <div class="goods-list-cont">
-                      <div class="goods-pos" v-for="item of goodsList" :key="item.productId">
-                          <div class="goods-show">
-                              <a href="javascript:void(0)" >
-                                  <div class="goods-img">
-                                      <img v-lazy="item.productImage" alt="">
-                                  </div>
-                                  <div class="goods-info">
-                                      <h3 class="goods-title">{{item.productName}}</h3>
-                                      <p>
-                                          <em class="rmb">￥</em>
-                                          <span class="money">{{item.productPrice}}.00</span>
-                                      </p>
-                                      <div class="addShopCar" @click="addShopCar(item.productId)">
-                                          加入购物车
-                                      </div>
-                                  </div>
-                              </a>
-                          </div>
-                      </div>     
-                  </div> 
-                  <div class="loadScroll" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
-                      <img v-if="showLoading" src="static/loading-svg/loading-bubbles.svg"  >
-                  </div>
-              </div>
+    <div class="goods">
+        <div class="good-cont">
+            <div class="goods-price">
+                <dl>
+                    <dt class="title" @click="niaho">PRICE(单价范围):</dt>
+                    <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPriceInterval('all')" href="javascript:void(0)">All(全部):</a></dd>
+                    <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPriceInterval(index)">{{items.startPrice}} - {{items.endPrice}}</a></dd>
+                </dl>
+            </div>
+            <div class="goods-list">
+                <div class="goods-list-cont">
+                    <div class="goods-pos" v-for="item of goodsList" :key="item.productId">
+                        <div class="goods-show" >
+                            <a href="javascript:void(0)" >
+                                <div class="goods-img">
+                                    <img v-lazy="item.productImage" alt="">
+                                </div>
+                                <div class="goods-info">
+                                    <h3 class="goods-title">{{item.productName}}</h3>
+                                    <p>
+                                        <em class="rmb" >￥</em>
+                                        <span class="money">{{item.productPrice}}.00</span>
+                                    </p>
+                                    <div class="addShopCar" @click="addShopCar(item.productId)">
+                                        加入购物车
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>     
+                </div> 
+                <div class="loadScroll" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="30">
+                    <img v-if="showLoading" src="static/loading-svg/loading-bubbles.svg"  >
+                </div>
+            </div>
+        </div>
+    </div>  
+    <transition name="login-animation">
+      <windows v-if="addCarRe">
+        <template slot="cont">
+          <div class="msg-cont">
+            <p>{{msgCar}}</p>
+            <button >关闭</button>
           </div>
-      </div>    
-
+        </template>
+      </windows>
+    </transition>
+    <transition name="login-animation">
+      <windows v-if="addCarSu">
+        <template slot="cont">
+          <div class="msg-cont">
+            <p>{{msgCar}}</p>
+            <button>继续购物</button>
+            <button>查看购物车</button>
+          </div>
+        </template>
+      </windows>
+    </transition>
     <foot></foot>
   </div>
 </template>
@@ -66,10 +84,14 @@
 import Headers from "@/components/header.vue";
 import NavCont from "@/components/NavCont.vue";
 import Foot from "@/components/foot.vue";
+import Windows from "@/components/windows.vue"
 import axios from "axios";
 export default {
   data() {
     return {
+      addCarRe:false,
+      addCarSu:false,
+      msgCar:"",
       showLoading:false,
       goodsList: [],
       sort: -1,
@@ -95,10 +117,14 @@ export default {
       ],
       checkPrice: "all",
       arrowSort: false,
-      busy:true
+      busy:true,
+      showStatus:false
     };
   },
   methods: {
+    niaho(){
+      this.aaa=true;
+    },
     //获取数据 
     homeInfo(flot){
       //this.showLoading=true;
@@ -166,14 +192,16 @@ export default {
       axios.post("/goods/addShopCar",addShopCarParam).then((res)=>{
         let data=res.data;
         if(data.result=="success"){
-          alert("添加成功")
+          this.msgCar=data.msg;
+          this.addCarSu=true;
         }else{
-          alert("添加失败")
+          this.msgCar=data.msg;
+          this.addCarRe=true;
         }
-        
        })
       // console.log(productId)
-    }
+    },
+    
   },
   mounted() {
     this.homeInfo();
@@ -181,7 +209,8 @@ export default {
   components: {
     Headers,
     NavCont,
-    Foot
+    Foot,
+    Windows
   }
 };
 </script>
@@ -189,12 +218,11 @@ export default {
 <style lang="stylus" scoped>
 @import '~@/assets/style/varibles.styl';
 
-.sort {
+.sort 
   background: #f5f7fc;
   width: 100%;
   padding: 60px 0 30px 0;
-
-  .sort-cont {
+  .sort-cont 
     display: flex;
     justify-content: flex-end;
     width: 80%;
@@ -203,85 +231,58 @@ export default {
     background: #fff;
     height: 1.01rem;
     line-height: 1.01rem;
-
-    .default {
+    .default 
       color: #ee7a23;
-    }
-
-    .price {
+  .price 
       color: #333;
-    }
-
-    .price:hover {
+    .price:hover 
       color: #ee7a23;
-    }
-  }
-}
-
-.goods {
+.goods 
   background: #f5f7fc;
   width: 100%;
   padding-bottom: 1.5rem;
-
-  .good-cont {
+  .good-cont 
     width: 80%;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
-
-    .goods-price {
+    .goods-price 
       flex: 1;
-    }
-
-    .goods-list {
+    .goods-list 
       flex: 5;
-    }
-
-    .title {
+    .title 
       color: #333;
       margin-bottom: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.05rem;
       font-size: 0.32rem;
-    }
-
-    dd {
+    dd 
       margin: 0.4rem 0;
       cursor: pointer;
-    }
-
-    dd a {
+    dd a 
       -webkit-transition: padding 0.5s;
       padding: 0.05rem 0;
       font-size: 0.28rem;
       line-height: 0.5rem;
       color: #333;
-    }
-
-    dd a:hover {
+    dd a:hover
       padding: 0.05rem 0.3rem;
       font-weight: 700;
       font-size: 0.28rem;
       color: #ee7a23;
       border-left: 2px solid #ee7a23;
-    }
-
-    dd .select {
+    dd .select 
       padding: 0.05rem 0.3rem;
       font-weight: 700;
       font-size: 0.28rem;
       color: #ee7a23;
       border-left: 2px solid #ee7a23;
-    }
-  }
-
-  .goods-pos {
+  .goods-pos 
     position: relative;
     margin: 0 0.3rem 0.4rem 0;
     width: 4.65rem;
     height: 8rem;
-
-    .goods-show {
+    .goods-show 
       position: absolute;
       width: 4.65rem;
       border: 2px solid #e9e9e9;
@@ -289,50 +290,34 @@ export default {
       top: 0;
       transition: top 0.5s;
       -webkit-transition: top 0.5s;
-    }
-
-    .goods-show:hover {
+    .goods-show:hover 
       top: -0.1rem;
       box-shadow: 0 0 0.5rem $notice;
       margin-top: 0rem;
       border: 2px solid $nowSelect;
-    }
-
-    .goods-show a {
+    .goods-show a 
       color: #333;
-
-      .goods-img {
+      .goods-img 
         height: 0;
         padding-bottom: 4.65rem;
         overflow: hidden;
-      }
-
-      .goods-img img {
+      .goods-img img 
         height: 4.65rem;
         width: 100%;
-      }
-
-      .goods-info {
+      .goods-info 
         padding: 0.29rem 0.2rem;
         background: #fff;
-
-        .goods-title {
+        .goods-title 
           padding-bottom: 0.2rem;
           height: 0.92rem;
           font-weight: 600;
-        }
-
-        p {
+        p 
           padding-bottom: 0.2rem;
-        }
-
-        p .rmb, .money {
+        p .rmb, .money 
           color: #d1434a;
           font-size: 0.4rem;
           line-height: 0.6rem;
-        }
-
-        .addShopCar {
+        .addShopCar 
           height: 0.8rem;
           padding: 0 0.2rem;
           border: 1px solid #d1434a;
@@ -342,27 +327,21 @@ export default {
           color: #d1434a;
           letter-spacing: 0.1rem;
           -webkit-transition: background 0.5s;
-        }
-
-        .addShopCar:hover {
+        .addShopCar:hover 
           background: #ffe5e6;
-        }
-      }
-    }
-  }
-
-  .goods-list-cont {
+  .goods-list-cont 
     display: flex;
     flex-wrap: wrap;
-  }
-
-  .loadScroll {
+  .loadScroll 
     text-align: center;
-  }
-
-  .loadScroll img {
+  .loadScroll img 
     height: 1.5rem;
     width: 1.5rem;
-  }
-}
+.login-animation-enter-active 
+  transition: all .3s ease;
+.login-animation-leave-active 
+  transition: all .8s ease;
+.login-animation-enter, .login-animation-leave-to 
+  transform :translateY(0.12rem);
+  opacity :0;
 </style>

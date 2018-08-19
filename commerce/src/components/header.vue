@@ -7,8 +7,9 @@
             </router-link>
         </div>
         <div class="right">
-            <span class="userName">用户名</span>
-            <span class="login" @click="showLoginWin">Login</span>
+            <span class="userName" v-if="loginCStatus">{{userNames}}</span>
+            <a class="out-login" v-if="loginCStatus" href="javascript:" @click="outLogin">退出登录</a>
+            <span class="login" @click="showLoginWin" v-if="!loginCStatus">登录</span>
             <i class="number">
                     1
             </i>
@@ -18,18 +19,22 @@
         </div>
     </div>
     <transition name="login-animation">
-        <login-wind @loginShow="showLogin" v-if="show"/>
+        <login-wind @loginShow="showLogin" v-if="show" @loginStatus="loginStatus"/>
     </transition>
  </div>
 </template>
 
 <script>
 import LoginWind from "./login.vue";
+import axios from "axios";
 export default {
   Headers:Headers,
+  
   data(){
       return{
-          show:false
+          show:false,
+          loginCStatus:false,
+          userNames:"用户名"
       }
   },
   components:{
@@ -41,7 +46,36 @@ export default {
       },
       showLoginWin(){
           this.show=true;
+      },
+      loginStatus(val){
+          this.loginCStatus=val.loginStatus,
+          this.userNames=val.userNames
+      },
+      outLogin(){
+          axios.post("/users/outlogin").then((res)=>{
+              let data=res.data;
+              if(res.status=="200"){
+                    this.loginCStatus=false,
+                    this.userNames=""
+             }else{
+                 console.log("退出异常")
+              }
+         })
+      },
+      init(){
+        axios.post("/users/loginstatus").then((res)=>{
+          let data=res.data;
+          if(data.msg=="success"){
+            this.loginCStatus=true;
+            this.userNames=data.relute.userName;
+          }else{
+            this.loginCStatus=false;
+          }
+        })
       }
+  },
+  mounted(){
+      this.init()
   }
 }
 </script>
@@ -67,16 +101,28 @@ export default {
                 font-family: moderat,sans-serif;
                 position :relative;
             .right .userName
-                display :none;
+                display :inline-block;
+                margin-right :0.2rem;
                 color :#333;
                 line-height :1.6rem;
-                font-size :0.32rem;
+                font-size :0.34rem;
                 font-weight :500;
+                font-family :Microsoft YaHei;
+            .right  .out-login
+                display :inline-block;
+                margin-right :0.2rem;
+                color :#333;
+                line-height :1.6rem;
+                font-size :0.34rem;
+                font-weight :500;
+                font-family :Microsoft YaHei;
             .right .login
+                display :inline-block;
+                margin-right :0.2rem;
                 cursor:pointer;
                 color :#333;
                 line-height :1.6rem;
-                font-size :0.36rem;
+                font-size :0.34rem;
                 font-family :Microsoft YaHei;
                 font-weight :500;
             .right .shopCar

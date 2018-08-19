@@ -4,11 +4,12 @@
             <h1 class="login-title">用户登陆</h1>
             <i class="iconfont off"  @click="loginWinShow">&#xe60f;</i>
             <div class="input-cont">
+                <p class="error" v-show="errorShow">{{errorMsg}}</p>
                 <div class="user-frame">
-                    <i class="iconfont user-icon">&#xe851;</i><input  v-model="loginUser" class="user-input" placeholder="用户名" type="text">
+                    <i class="iconfont user-icon">&#xe851;</i><input  v-model="userName" class="user-input" placeholder="用户名" type="text">
                 </div>
                 <div class="pwd-frame">
-                    <i class="iconfont pwd-icon">&#xe607;</i><input class="pwd-input" v-model="loginPwd" placeholder="密码" type="password">
+                    <i class="iconfont pwd-icon">&#xe607;</i><input class="pwd-input" v-model="userPwd" placeholder="密码" type="password">
                 </div>
                 <button class="login-btn" @click="userLogins">登陆</button>
             </div>
@@ -23,9 +24,15 @@ export default {
     data(){
         return{
             shows:false,
-            loginUser:"",
-            loginPwd:""
+            userName:"",
+            userPwd:"",
+            errorShow:false,
+            errorMsg:"",
+            loginStatus:false,
         }
+    },
+    props:{
+
     },
     methods:{
         loginWinShow(){
@@ -34,21 +41,35 @@ export default {
         },
         userLogins(){
             //console.log(this.userLogin+"  "+this.pwd)
-            let userParams={
-                loginUser:this.loginUser,
-                loginPwd:this.loginPwd
+            if(!this.userName || !this.userPwd){
+                this.errorMsg="用户名或密码不能为空";
+                this.errorShow=true;
+                return ;
             }
-            axios.post("userlogin",{
-                userParams
-            }).then((res)=>{
-                if(res){
-                    alert("错了")
+            let userParams={
+                userName:this.userName,
+                userPwd:this.userPwd
+            }
+            axios.post("/users/userlogin",userParams).then((res)=>{
+                let data=res.data;
+                if(data.status=="500"){
+                     this.errorMsg="用户名或密码不正确";
+                    this.errorShow=true;
+                    
                 }else{
-                    alert("对了");
+                    this.errorShow=false;
+                    this.shows=false;
+                    let loginIn={
+                        loginStatus:true,
+                        userNames:data.userNames
+                    }
+                    this.$emit("loginStatus",loginIn);
+                    this.$emit("loginShow",this.shows);
                 }
             })
         }
     }
+    
 }
 </script>
 
@@ -75,6 +96,7 @@ export default {
         .login-title
             text-align :center;
             font-size :0.5rem;
+            padding :0.1rem 0;
             font-color:$fontBlack;
         .off
             font-size:0.5rem
@@ -89,6 +111,14 @@ export default {
         .input-cont
             margin :0.8rem 1rem 1rem 1rem;
             text-align :center;
+            .error
+                position :absolute;
+                top :1.2rem;
+                left:1.5rem;
+                color:#f00;
+                font-size :0.25rem;
+                padding : 0.15rem;
+                z-index :4;
             .user-frame,.pwd-frame
                 margin-bottom:0.4rem;
                 padding :0.02rem;
@@ -106,6 +136,7 @@ export default {
                     font-size:0.36rem;
                     padding :0.25rem;
             .login-btn
+                cursor :pointer;
                 margin-top:0.2rem;
                 padding:0.1rem 0;
                 font-weight:500;
