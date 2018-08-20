@@ -30,7 +30,7 @@ app.use((req,res,next)=>{
     }else{
       res.json({
         status:"200",
-        msg:"当前没有登陆！！",
+        msg:"请先登陆，否则无法加入购物车中！",
         result:""
       })
     }

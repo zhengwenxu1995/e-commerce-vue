@@ -28,7 +28,7 @@
 import LoginWind from "./login.vue";
 import axios from "axios";
 export default {
-  Headers:Headers,
+  Headers:"Headers",
   
   data(){
       return{

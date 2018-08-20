@@ -36,7 +36,6 @@ router.post("/userlogin",function (req,res,next){
           relute:""
         })
       }else{
-        
         res.json({
           status:'500',
           msg:"failure",

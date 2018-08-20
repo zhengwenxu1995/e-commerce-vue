@@ -1,7 +1,7 @@
 <template>
     <div class="win-background">
         <div class="win-frame">
-            <i class="iconfont win-off" >&#xe60f;</i>
+            <i class="iconfont win-off" @click="closeWin">&#xe60f;</i>
             <slot name="cont"></slot>
         </div>
     </div>
@@ -13,11 +13,14 @@ export default {
     Windows:"Windows",
     data(){
         return{
-            
+            showWin:""
         }
     },
     methods:{
-        
+        closeWin(){
+            this.showWin=false;
+            this.$emit("closeWin",this.showWin);
+        }
     }
     
 }

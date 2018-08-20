@@ -2,7 +2,7 @@
  <div class="nav">
     <div class="nav-cont">
         <div class="nav-list">
-            <router-link class="home" to="">Home</router-link> / <router-link class="goodList" to=""><slot name="navShow"></slot></router-link>
+            <router-link class="home" to="/">Home</router-link> / <router-link class="goodList" to=""><slot name="navShow"></slot></router-link>
         </div>
     </div>
  </div>

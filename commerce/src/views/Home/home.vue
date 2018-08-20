@@ -22,7 +22,7 @@
         <div class="good-cont">
             <div class="goods-price">
                 <dl>
-                    <dt class="title" @click="niaho">PRICE(单价范围):</dt>
+                    <dt class="title" >PRICE(单价范围):</dt>
                     <dd><a v-bind:class="{select:checkPrice=='all'}" @click="checkPriceInterval('all')" href="javascript:void(0)">All(全部):</a></dd>
                     <dd v-for="(items,index) of priceList"  :key="index"><a v-bind:class="{select:checkPrice==index}" href="javascript:void(0)"  @click="checkPriceInterval(index)">{{items.startPrice}} - {{items.endPrice}}</a></dd>
                 </dl>
@@ -56,22 +56,24 @@
         </div>
     </div>  
     <transition name="login-animation">
-      <windows v-if="addCarRe">
+      <windows v-if="addCarRe" @closeWin="closeWinFail">
         <template slot="cont">
           <div class="msg-cont">
-            <p>{{msgCar}}</p>
-            <button >关闭</button>
+            <p class="failureMsg">{{msgCar}}</p>
+            <button class="failuerClose" @click="closeWinFails">关&nbsp;&nbsp;闭</button>
           </div>
         </template>
       </windows>
     </transition>
     <transition name="login-animation">
-      <windows v-if="addCarSu">
+      <windows v-if="addCarSu" @closeWin="closeWinSu">
         <template slot="cont">
           <div class="msg-cont">
-            <p>{{msgCar}}</p>
-            <button>继续购物</button>
-            <button>查看购物车</button>
+            <div class="cont-postion">
+              <i class="iconfont successIcon">&#xe6a0;</i><p class="successAddCar">{{msgCar}}</p>
+            </div>
+            <a class="thenShop" @click="closeWinSus">继续购物</a>
+            <router-link class="viewShopCar" to="/shopcar">查看购物车</router-link>
           </div>
         </template>
       </windows>
@@ -122,8 +124,19 @@ export default {
     };
   },
   methods: {
-    niaho(){
-      this.aaa=true;
+    //未登录 关闭窗口
+    closeWinFail(val){
+      this.addCarRe=val;
+    },
+    closeWinFails(){
+      this.addCarRe=false;
+    },
+    //登陆成功  关闭窗口
+    closeWinSu(val){
+      this.addCarSu=val;
+    },
+    closeWinSus(){
+       this.addCarSu=false;
     },
     //获取数据 
     homeInfo(flot){
@@ -344,4 +357,63 @@ export default {
 .login-animation-enter, .login-animation-leave-to 
   transform :translateY(0.12rem);
   opacity :0;
+.msg-cont
+  padding :0.5rem 1rem;
+  margin-top:0.6rem;
+  text-align :center;
+  .failureMsg
+    text-align :center;
+    font-size :0.36rem;
+    padding-bottom:0.5rem;
+    letter-spacing :0.05rem;
+    margin-bottom :0.8rem;
+    font-family :Microsoft YaHei;
+  .failuerClose
+    height :0.8rem;
+    border:0.02rem solid #d1434a;
+    padding:0 1.8rem;
+    color:#dd7479;
+    cursor :pointer;
+    font-weight: 600;
+    background :#fff;
+  .failuerClose:hover 
+    background: #ffe5e6;
+  .cont-postion
+    position :relative;
+    margin-bottom :0.6rem;
+    .successAddCar
+      display :inline-block;
+      padding-left :0.2rem;
+      font-size :0.5rem;
+      line-height :1rem;
+    .successIcon
+      font-size :1rem;
+      color:#dd7479;
+      position :absolute;
+      left:2rem;
+      top:0;
+  .thenShop
+      display :inline-block;
+      height :0.8rem;
+      line-height :0.8rem;
+      border:0.02rem solid #d1434a;
+      padding:0 0.8rem;
+      color:#dd7479;
+      cursor :pointer;
+      font-weight: 600;
+      font-szie:0.35rem;
+      background:#ffe5e6;
+      margin-right :0.5rem;
+  .viewShopCar
+      display :inline-block;
+      height :0.8rem;
+      line-height :0.8rem;
+      margin-left :0.5rem;
+      border:0.02rem solid #d1434a;
+      padding:0 0.8rem;
+      color:#fff;
+      cursor :pointer;
+      font-szie:0.35rem;
+      font-weight: 600;
+      background:#dd7479;
 </style>
