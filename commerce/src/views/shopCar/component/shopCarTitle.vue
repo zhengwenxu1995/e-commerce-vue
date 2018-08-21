@@ -39,7 +39,7 @@ export default {
         margin :0 auto ;
         width :80%;
         .title .title-cont
-            padding:0.5rem 0 0.3rem 0;
+            padding:1rem 0 0.8rem 0;
             font-family:Microsoft YaHei; 
             font-size:0.5rem;
             font-weight:600;
@@ -51,15 +51,15 @@ export default {
             li
                 text-align:center;
                 font-size :0.35rem;
-                padding:0.2rem 0;
+                padding:0.4rem 0;
                 color:#fff;
                 font-font-family :Microsoft YaHei;
             .items
-                flex:3;
+                flex:2.5;
             .price
                 flex:1;
             .quantity
-                flex:1;
+                flex:1.5;
             .subtotal
                 flex:1;
             .del
