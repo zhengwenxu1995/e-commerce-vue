@@ -80,5 +80,9 @@ router.post("/loginstatus",function (req,res,error){
       });
     }
 })
+//购物车
 
+router.post("/shopcar",function (req,res,next){
+  Users.findOne({})
+})
 module.exports = router;
