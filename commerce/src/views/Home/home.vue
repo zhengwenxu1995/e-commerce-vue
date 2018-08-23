@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>  
-    <transition name="login-animation">
+    <transition name="windows">
       <windows v-if="addCarRe" @closeWin="closeWinFail">
         <template slot="cont">
           <div class="msg-cont">
@@ -65,7 +65,7 @@
         </template>
       </windows>
     </transition>
-    <transition name="login-animation">
+    <transition name="windows">
       <windows v-if="addCarSu" @closeWin="closeWinSu">
         <template slot="cont">
           <div class="msg-cont">
@@ -197,10 +197,27 @@ export default {
       this.page=1;
       this.homeInfo();
     },
+    //自己封装的获取的cookie的值
+    getCookie(cookieName){
+      let value=null;
+      let allCookie=document.cookie;
+      if(allCookie){
+        let arrCookie=allCookie.split(";")
+        for(let i=0;i<arrCookie.length-1;i++){
+          let seleCookie=arrCookie[i].split("=")
+          if(seleCookie[0]==cookieName){
+            value=seleCookie[1];
+          }
+        }
+      }
+      return value;
+    }, 
     //加入购物车
     addShopCar (productId){
+      console.log(this.getCookie("userId"))
       let addShopCarParam={
-        productId:productId
+        productId:productId,
+        userId:this.$cookie.get("userId")
       }
       axios.post("/goods/addShopCar",addShopCarParam).then((res)=>{
         let data=res.data;
@@ -350,11 +367,11 @@ export default {
   .loadScroll img 
     height: 1.5rem;
     width: 1.5rem;
-.login-animation-enter-active 
+.windows-enter-active 
   transition: all .3s ease;
-.login-animation-leave-active 
+.windows-leave-active 
   transition: all .8s ease;
-.login-animation-enter, .login-animation-leave-to 
+.windows-enter, .windows-leave-to 
   transform :translateY(0.12rem);
   opacity :0;
 .msg-cont

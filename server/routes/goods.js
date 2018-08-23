@@ -70,7 +70,8 @@ router.get("/",function (request,response,next){
         if(error){
             response.json({
                 status:404,
-                msg:error.message
+                msg:error.message,
+                relute:""
             })
         }else{
             response.json({
@@ -88,7 +89,7 @@ router.get("/",function (request,response,next){
 router.post("/addShopCar",function (request,response,next){
     //用户模块 user.js
     var User = require("../models/users.js")
-    let userId="a0001";
+    let userId=request.body.userId;
     let productId=request.body.productId;
     User.findOne({"userId":userId},function (error1,userDoc){
         if(error1){

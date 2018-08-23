@@ -9,9 +9,9 @@
                     <i class="iconfont user-icon">&#xe851;</i><input  v-model="userName" class="user-input" placeholder="用户名" type="text">
                 </div>
                 <div class="pwd-frame">
-                    <i class="iconfont pwd-icon">&#xe607;</i><input class="pwd-input" v-model="userPwd" placeholder="密码" type="password">
+                    <i class="iconfont pwd-icon">&#xe607;</i><input class="pwd-input" v-model="userPwd" placeholder="密码" type="password" @keydown.enter="userLogins">
                 </div>
-                <button class="login-btn" @click="userLogins">登陆</button>
+                <button class="login-btn" @click="userLogins">登&nbsp;陆</button>
             </div>
             
         </div>

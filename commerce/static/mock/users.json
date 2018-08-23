@@ -16,7 +16,8 @@
             "productName" : "String", 
             "salePrice" : "String", 
             "checked" : "String", 
-            "productNum" : "String"
+            "productNum" : "String",
+			"productImage":"String"
         }
     ], 
     "addressList" : [

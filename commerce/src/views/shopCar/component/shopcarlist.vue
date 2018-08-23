@@ -1,68 +1,36 @@
 <template>
     <div class="cont">
         <div class="commodity-list">
-            <div class="commoditys">
+            <div class="commoditys" v-for="item of shopCar" :key="item.productId">
                 <ul class="commodity-one">
                     <li class="commodity-cont">
                         <div class="commodity-show">
-                            <i class="iconfont check"  v-if="check">
+                           <a href="javascript:viod(0)"><i class="iconfont check"  v-if="item.checked">
                                 &#xe617;
                             </i>
-                            <i class="iconfont not-check" v-if="!check">
+                            <i class="iconfont not-check" v-if="!item.checked">
                                 &#xe61a;
-                            </i>
+                            </i></a>
                         <div class="commodity-infor">
-                            <img src="static/img/1.jpg" alt="" style="width:80px;height:80px;">
-                            <span class="commodity-name">xiaoni</span>
+                            <img :src="item.productImage" alt="" style="width:80px;height:80px;">
+                            <span class="commodity-name">{{item.productName}}</span>
                         </div>
                         </div>
                     </li>
-                    <li class="price"><span>2449</span></li>
+                    <li class="price"><span>{{item.productPrice}}.00</span></li>
                     <li class="number">
-                        <a href="javascript:void(0);" class="plus">-</a><span class="now-comm-number">1</span><a href="javascript:void(0);" class="less">+</a>
+                        <a href="javascript:void(0);" class="plus">-</a><span class="now-comm-number">{{item.productNum}}</span><a href="javascript:void(0);" class="less">+</a>
                     </li>
                     <li class="sum">
-                        <span class="sum-number">2499</span>
+                        <span class="sum-number">{{item.productPrice*item.productNum}}.00</span>
                     </li>
                     <li class="del-btn">
-                        <a href="javascript:void(0)">
+                        <a href="javascript:void(0)" @click="showWin">
                             <i class="iconfont delete-btn">&#xe613;</i>
                         </a>
                     </li>
                 </ul>
             </div>
-
-            <div class="commoditys">
-                <ul class="commodity-one">
-                    <li class="commodity-cont">
-                        <div class="commodity-show">
-                            <i class="iconfont check"  v-if="check">
-                                &#xe617;
-                            </i>
-                            <i class="iconfont not-check" v-if="!check">
-                                &#xe61a;
-                            </i>
-                        <div class="commodity-infor">
-                            <img src="static/img/1.jpg" alt="" style="width:80px;height:80px;">
-                            <span class="commodity-name">xiaoni</span>
-                        </div>
-                        </div>
-                    </li>
-                    <li class="price"><span>2449</span></li>
-                    <li class="number">
-                        <a href="javascript:void(0);" class="plus">-</a><span class="now-comm-number">1</span><a href="javascript:void(0);" class="less">+</a>
-                    </li>
-                    <li class="sum">
-                        <span class="sum-number">2499</span>
-                    </li>
-                    <li class="del-btn">
-                        <a href="javascript:void(0)">
-                            <i class="iconfont delete-btn">&#xe613;</i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
         <div class="select-all">
             <ul class="menu-list">
@@ -72,25 +40,85 @@
                 </li>
                 <li class="tatal-cont">
                     <span class="total-word">总价:</span>
-                    <em class="total-money">6900</em>
+                    <em class="total-money">6900.00</em>
                 </li>
                 <li class="total">
                     <a href="javasrcipt:void(0)" class="total-btn">结算</a>
                 </li>
             </ul>
         </div>
+        <transition name="windows">
+            <windows v-if="delShowFrame" @closeWin="closeWin">
+                <div slot="cont">
+                    <p>确定要删除此项商品！</p>
+                    <a href="JavaScript:voed(0)" @click="delconfirm">确定</a>
+                    <a href="JavaScript:void(0)" @click="showWin">取消</a>
+                </div>
+            </windows>
+        </transition>
     </div>
 </template>
 
 <script>
+import windows from "@/components/windows.vue"
+import axios from "axios";
 export default {
     ShopCarList:"ShopCarList",
+    components:{
+        windows
+    },
     data(){
         return {
             check:false,
-            allCheck:false
+            allCheck:false,
+            shopCar:[],
+            delShowFrame:false
         }
-    }
+    },
+    methods:{
+        //确认删除
+         delconfirm(){
+
+         },
+        //显示删除框
+       showWin(){
+           if(this.delShowFrame){
+               this.delShowFrame=false;
+           }else{
+               this.delShowFrame=true;
+           }
+            
+        },
+        //关闭删除框
+        closeWin(val){
+            this.delShowFrame=val;
+        },
+        getShopCar(){
+            //使用vue-cookie
+            // let params={
+            //     userId:this.$cookie.get("userId")
+            // }
+            axios.get("/users/shopcar").then(
+                (res)=>{
+                    let data=res.data;
+                    if(data.status==200){
+                        this.shopCar=data.relute;
+                    }
+                }
+            )
+        },
+        delShopCarCommerce(commerceId){
+            let params={
+                productId:commerceId
+            }
+            axios.post("/users/delcommerce",params).then((res)=>{
+                console.log(res)
+            })
+        }
+    },
+    mounted(){
+        this.getShopCar()
+    },
 }
 </script>
 
@@ -158,6 +186,8 @@ export default {
             .delete-btn
                 font-size:0.5rem;
                 color :#333;
+            .delete-btn:hover
+                color :#F40;
             .plus
                 border:0.02rem solid #aaa;
                 border-right :0;
@@ -219,4 +249,11 @@ export default {
                 padding:0 0.4rem 0 0.3rem;
             .del-intord
                 padding:0 0.2rem 0 0.3rem;
+    .windows-enter-active 
+        transition: all .3s ease;
+    .windows-leave-active 
+        transition: all .8s ease;
+    .windows-enter, .windows-leave-to 
+        transform :translateY(0.12rem);
+        opacity :0;
 </style>
