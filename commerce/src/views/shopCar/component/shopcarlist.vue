@@ -5,10 +5,10 @@
                 <ul class="commodity-one">
                     <li class="commodity-cont">
                         <div class="commodity-show">
-                           <a href="javascript:viod(0)"><i class="iconfont check"  v-if="item.checked">
+                           <a href="javascript:void(0)"><i class="iconfont check"  v-if="item.checked=='1'" @click="carEdit('check',item)">
                                 &#xe617;
                             </i>
-                            <i class="iconfont not-check" v-if="!item.checked">
+                            <i class="iconfont not-check" v-if="item.checked=='0'" @click="carEdit('check',item)">
                                 &#xe61a;
                             </i></a>
                         <div class="commodity-infor">
@@ -19,13 +19,13 @@
                     </li>
                     <li class="price"><span>{{item.productPrice}}.00</span></li>
                     <li class="number">
-                        <a href="javascript:void(0);" class="plus">-</a><span class="now-comm-number">{{item.productNum}}</span><a href="javascript:void(0);" class="less">+</a>
+                        <a href="javascript:void(0);" class="plus" @click="carEdit('-',item)">-</a><span class="now-comm-number">{{item.productNum}}</span><a href="javascript:void(0);" class="less" @click="carEdit('+',item)">+</a>
                     </li>
                     <li class="sum">
                         <span class="sum-number">{{item.productPrice*item.productNum}}.00</span>
                     </li>
                     <li class="del-btn">
-                        <a href="javascript:void(0)" @click="showWin">
+                        <a href="javascript:void(0)" @click="showWin(item.productId)">
                             <i class="iconfont delete-btn">&#xe613;</i>
                         </a>
                     </li>
@@ -34,7 +34,7 @@
         </div>
         <div class="select-all">
             <ul class="menu-list">
-                <li class="all-btn"><i class="iconfont icon-all" v-if="allCheck">&#xe61a;</i><i class="iconfont icon-del" v-if="!allCheck">&#xe617;</i></li>
+                <li class="all-btn"><i class="iconfont icon-all" v-if="allCheck" @click="allSelect">&#xe61a;</i><i class="iconfont icon-del" v-if="!allCheck" @click="allSelect">&#xe617;</i></li>
                 <li class="all-del">
                     <span class="all-intord">全选</span><span class="del-intord">删除全选</span>
                 </li>
@@ -49,10 +49,10 @@
         </div>
         <transition name="windows">
             <windows v-if="delShowFrame" @closeWin="closeWin">
-                <div slot="cont">
-                    <p>确定要删除此项商品！</p>
-                    <a href="JavaScript:voed(0)" @click="delconfirm">确定</a>
-                    <a href="JavaScript:void(0)" @click="showWin">取消</a>
+                <div slot="cont" class="delMsg-cont">
+                    <p class="delMsg">确定要删除此项商品！</p>
+                    <a href="JavaScript:void(0)" class="delSubmit" @click="delconfirm">确定</a>
+                    <a href="JavaScript:void(0)" class="delClose" @click="showWin">取消</a>
                 </div>
             </windows>
         </transition>
@@ -69,22 +69,38 @@ export default {
     },
     data(){
         return {
-            check:false,
-            allCheck:false,
+            allCheck:true,
             shopCar:[],
-            delShowFrame:false
+            delShowFrame:false,
+            delCommerceId:""
         }
     },
     methods:{
         //确认删除
          delconfirm(){
-
+             let params={
+                 productId:this.delCommerceId
+             }
+             axios.post("/users/delcommerce",params).then((res)=>{
+                 let data=res.data;
+                 if(data.status==200){
+                     this.delShowFrame=false;
+                     this.getShopCar();
+                    // this.shopCar.forEach(element => {
+                    //     if(element.productId){
+                    //         this.shopCar.pop(element)
+                    //     }
+                    // });
+                 }
+             })
          },
         //显示删除框
-       showWin(){
+       showWin(productId){
            if(this.delShowFrame){
                this.delShowFrame=false;
+               this.delCommerceId="";
            }else{
+               this.delCommerceId=productId;
                this.delShowFrame=true;
            }
             
@@ -107,13 +123,34 @@ export default {
                 }
             )
         },
-        delShopCarCommerce(commerceId){
-            let params={
-                productId:commerceId
+        carEdit(symb,item){
+            if(symb=='+'){
+                item.productNum++;
+            }else if(symb=='-'){
+                if(item.productNum==1){
+                    return;
+                }else{
+                    item.productNum--;
+                }
+            }else{
+                item.checked=item.checked=='1'?'0':'1';
             }
-            axios.post("/users/delcommerce",params).then((res)=>{
-                console.log(res)
-            })
+            let params={
+                productId:item.productId,
+                productNum:item.productNum,
+                checked:item.checked
+            }
+            axios.post("/users/caredit",params).then((res)=>{
+                let data =res.data;
+                if(data.status==200){
+                    console.log("增加成功")
+                }else{
+                    console.log("错误");
+                }
+            });
+        },
+        allSelect(){
+            this.allCheck=this.allCheck==true ? false : true;
         }
     },
     mounted(){
@@ -124,6 +161,8 @@ export default {
 
 <style lang="stylus" scoped>
 @import "~@/assets/style/varibles.styl";
+i
+    cursor :pointer;
 .cont
     background :#f5f7fc;
     width:100%;
@@ -256,4 +295,38 @@ export default {
     .windows-enter, .windows-leave-to 
         transform :translateY(0.12rem);
         opacity :0;
+.delMsg-cont
+    padding :0.5rem 1rem 0 1rem;
+    margin-top:0.6rem;
+    text-align :center;
+    .delMsg
+        text-align :center;
+        font-size :0.36rem;
+        padding-bottom:0.5rem;
+        letter-spacing :0.05rem;
+        margin-bottom :0.8rem;
+        font-family :Microsoft YaHei;
+    .delClose
+        display :inline-block;
+        margin-left  :0.5rem;
+        line-height :0.8rem;
+        height :0.8rem;
+        border:0.02rem solid #d1434a;
+        padding:0 1.5rem;
+        color:#fff;
+        cursor :pointer;
+        font-weight: 600;
+        background :#db4f45;
+    .delSubmit
+        display :inline-block;
+        margin-right :0.5rem;
+        line-height :0.8rem;
+        height :0.8rem;
+        border:0.02rem solid #d1434a;
+        padding:0 1.5rem;
+        color:#dd7479;
+        cursor :pointer;
+        font-weight: 600;
+        background :#fff;
+        margin-left :0.3rem;
 </style>

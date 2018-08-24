@@ -404,33 +404,35 @@ export default {
       font-size :0.5rem;
       line-height :1rem;
     .successIcon
-      font-size :1rem;
+      font-size :0.7rem;
       color:#dd7479;
       position :absolute;
-      left:2rem;
-      top:0;
+      left:2.5rem;
+      top:0.17rem;
   .thenShop
       display :inline-block;
-      height :0.8rem;
+      margin-left  :0.6rem;
       line-height :0.8rem;
+      height :0.8rem;
       border:0.02rem solid #d1434a;
-      padding:0 0.8rem;
-      color:#dd7479;
+      width :3.5rem;
+      color:#db4f45;
       cursor :pointer;
       font-weight: 600;
-      font-szie:0.35rem;
-      background:#ffe5e6;
-      margin-right :0.5rem;
+      background :#fff;
+  .thenShop:hover
+      background :#ffe5e6;
   .viewShopCar
       display :inline-block;
-      height :0.8rem;
+      margin-left  :0.6rem;
       line-height :0.8rem;
-      margin-left :0.5rem;
+      height :0.8rem;
       border:0.02rem solid #d1434a;
-      padding:0 0.8rem;
-      color:#fff;
+      width :3.5rem;
+      color:#db4f45;
       cursor :pointer;
-      font-szie:0.35rem;
       font-weight: 600;
-      background:#dd7479;
+      background :#fff;
+  .viewShopCar:hover
+      background :#ffe5e6;
 </style>

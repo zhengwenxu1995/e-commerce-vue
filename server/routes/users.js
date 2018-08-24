@@ -106,12 +106,54 @@ router.get("/shopcar",function (req,res,next){
 router.post("/delcommerce",(req,res,next)=>{
   let userId=req.cookies.userId;
   let productId=req.body.productId;
-  Users.findOne({"userId":userId,"carList":[{"productId":productId}]},(error,doc)=>{
+  Users.updateMany({"userId":userId},{$pull:{"carList":{"productId":productId}}},(error,doc)=>{
     if(error){
-      console.log(error.message);
+      res.json({
+        status:500,
+        msg:"failure",
+        relute:""
+      })
     }else{
-      console.log("wozhaodaole"+doc)
+      res.json({
+        status:200,
+        msg:"success",
+        relute:""
+      })
     }
   })
 })
+
+//修改购物车商品数量
+router.post("/caredit",(req,res,next)=>{
+  let userId=req.cookies.userId,
+      productId=req.body.productId,
+      productNum=req.body.productNum,
+      checked=req.body.checked;
+      //$ 是一个占位符
+      console.log(userId+" "+productId+" "+productNum)
+  Users.update({"userId":userId,
+                "carList.productId":productId
+              },{
+                "carList.$.productNum":productNum,
+                "carList.$.checked":checked
+              },(error,doc)=>{
+                //这个doc 是显示了 修改了几条  修改成功没
+
+                if(error){
+                  res.json({
+                    status:500,
+                    msg:"failure",
+                    relute:""
+                  });
+                }else{
+                  res.json({
+                    status:200,
+                    msg:"success",
+                    relute:""
+                  })
+                }
+              })
+})
+
+
 module.exports = router;
