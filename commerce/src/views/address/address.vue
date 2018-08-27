@@ -4,9 +4,7 @@
         <nav-cont>
             <span slot="navShow">地址</span>
         </nav-cont>
-        <div>
-            我是地址
-        </div>
+        <address-list></address-list>
         <foot></foot>
     </div>
 </template>
@@ -15,6 +13,7 @@
 import Headers from "@/components/header.vue";
 import NavCont from "@/components/NavCont.vue";
 import Foot from "@/components/foot.vue";
+import AddressList from "@/views/address/component/addressList.vue"
 export default {
     Address:"Address",
     data(){
@@ -32,7 +31,8 @@ export default {
         //组件
         Headers,
         NavCont,
-        Foot
+        Foot,
+        AddressList
     },
     computed:{
         //计算属性
