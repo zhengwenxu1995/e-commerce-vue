@@ -7,12 +7,15 @@ import "@/assets/style/reset.css"
 import "@/assets/style/iconfont.css"
 import VueLazyload from "vue-lazyload"
 import infiniteScroll from "vue-infinite-scroll"
+import {currency} from "@/util/currency.js" 
 
 
 Vue.config.productionTip = false
 var VueCookie = require('vue-cookie')
 Vue.use(VueCookie);
-Vue.use(infiniteScroll)
+Vue.use(infiniteScroll);
+//使用全局的过滤器
+Vue.filter("currency",currency)
 Vue.use(VueLazyload, {
         loading: "/static/loading-svg/loading-bars.svg"
     })

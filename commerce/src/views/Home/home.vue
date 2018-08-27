@@ -1,7 +1,7 @@
 <template>
   <div>
     <headers v-bind:showStatus="showStatus"></headers>
-    <nav-cont><span slot="navShow">Goods</span></nav-cont>
+    <nav-cont><span slot="navShow">商品</span></nav-cont>
     <div class="sort">
       <div class="sort-cont">
           <div class="price-sort">
@@ -39,7 +39,7 @@
                                     <h3 class="goods-title">{{item.productName}}</h3>
                                     <p>
                                         <em class="rmb" >￥</em>
-                                        <span class="money">{{item.productPrice}}.00</span>
+                                        <span class="money">{{item.productPrice | currency("",2)}}</span>
                                     </p>
                                     <div class="addShopCar" @click="addShopCar(item.productId)">
                                         加入购物车

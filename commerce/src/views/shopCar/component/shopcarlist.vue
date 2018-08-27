@@ -17,12 +17,12 @@
                         </div>
                         </div>
                     </li>
-                    <li class="price"><span>{{item.productPrice}}.00</span></li>
+                    <li class="price"><span>{{item.productPrice | currency("",2)}}</span></li>
                     <li class="number">
                         <a href="javascript:void(0);" class="plus" @click="carEdit('-',item)">-</a><span class="now-comm-number">{{item.productNum}}</span><a href="javascript:void(0);" class="less" @click="carEdit('+',item)">+</a>
                     </li>
                     <li class="sum">
-                        <span class="sum-number">{{item.productPrice*item.productNum}}.00</span>
+                        <span class="sum-number">{{(item.productPrice*item.productNum) | currency("$",2)}}</span>
                     </li>
                     <li class="del-btn">
                         <a href="javascript:void(0)" @click="showWin(item.productId)">
@@ -34,16 +34,16 @@
         </div>
         <div class="select-all">
             <ul class="menu-list">
-                <li class="all-btn"><i class="iconfont icon-all" v-if="allCheck" @click="allSelect">&#xe61a;</i><i class="iconfont icon-del" v-if="!allCheck" @click="allSelect">&#xe617;</i></li>
+                <li class="all-btn"><i class="iconfont icon-all" v-if="allCheck" @click="allSelect">&#xe617;</i><i class="iconfont icon-del" v-if="!allCheck" @click="allSelect">&#xe61a;</i></li>
                 <li class="all-del">
                     <span class="all-intord">全选</span><span class="del-intord">删除全选</span>
                 </li>
                 <li class="tatal-cont">
                     <span class="total-word">总价:</span>
-                    <em class="total-money">6900.00</em>
+                    <em class="total-money">{{this.totalPrice | currency("$",2)}}</em>
                 </li>
                 <li class="total">
-                    <a href="javasrcipt:void(0)" class="total-btn">结算</a>
+                    <a href="javasrcipt:void(0)" v-bind:class="{'total-btn':checkCount>0,'total-btn-dis':checkCount==0}" @click="checkOut">结算</a>
                 </li>
             </ul>
         </div>
@@ -62,6 +62,7 @@
 <script>
 import windows from "@/components/windows.vue"
 import axios from "axios";
+// import {currency} from "@/util/currency.js";
 export default {
     ShopCarList:"ShopCarList",
     components:{
@@ -69,13 +70,28 @@ export default {
     },
     data(){
         return {
-            allCheck:true,
+            // allCheck:true,
             shopCar:[],
             delShowFrame:false,
             delCommerceId:""
         }
     },
+    //过滤器  局部的
+    // filters:{
+    //     // 过滤器名字：function （）{
+    //     //     处理数据
+    //     // }
+    //     currency:currency
+    // },
     methods:{
+        //结算控制
+        checkOut(){
+            if(this.checkCount>0){
+                this.$router.push({
+                path:"/address"
+                })
+            }
+        },
         //确认删除
          delconfirm(){
              let params={
@@ -150,12 +166,66 @@ export default {
             });
         },
         allSelect(){
-            this.allCheck=this.allCheck==true ? false : true;
+            // this.allCheck=this.allCheck==true ? false : true;
+            let flag=!this.allCheck;
+            this.shopCar.forEach((item)=>{
+                item.checked= flag ? "1" : "0";
+            })
+            let params={
+                allCheck:flag
+            }
+            axios.post("/users/careditallcheck",params).then((res)=>{
+                let data=res.data;
+                if(data.status=="200"){
+                    console.log("成功")
+                }else{
+                    console.log("失败")
+                }
+            })
         }
+    },
+    computed:{
+        allCheck(){
+          return  this.checkCount==this.shopCar.length?true:false;
+        },
+        checkCount(){
+            let i=0;
+            this.shopCar.forEach((item)=>{
+               if(item.checked=="1"){
+                  i++
+               }
+            })
+            return i;
+        },
+        totalPrice(){
+            let total=0
+            this.shopCar.forEach((item)=>{
+               if(item.checked=="1"){
+                   total+=item.productNum*item.productPrice
+               }
+            })
+            return total;
+        }
+        // allCheck:{
+        //     // set:function (i){
+        //     //     //this.allCheck= this.shopCar.length==i && i>1 ?true:false;
+        //     // },
+        //     get:function (){
+        //         let i=0;
+        //         this.shopCar.forEach((item)=>{
+        //         if(item.checked=="1"){
+        //             console.log(i)
+        //             i++
+        //         }
+        //         })
+        //         return i;
+        //     }
+        // }
     },
     mounted(){
         this.getShopCar()
-    },
+    }
+    
 }
 </script>
 
@@ -281,6 +351,16 @@ i
                 text-align:center;
                 box-sizing :border-box;
                 border :1px solid #f00;
+                width :100%;
+            .total-btn-dis
+                background :#f0f0f0;
+                display :inline-block;
+                color:#fff;
+                font-weight :600;
+                height :100%;
+                line-height :1.2rem;
+                text-align:center;
+                box-sizing :border-box;
                 width :100%;
         .all-del
             flex:1;

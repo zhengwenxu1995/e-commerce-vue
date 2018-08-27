@@ -154,6 +154,48 @@ router.post("/caredit",(req,res,next)=>{
                 }
               })
 })
+//购物车的全选接口
+router.post("/careditallcheck",(req,res,next)=>{
+  let allcheck=req.body.allCheck;
+  let userId=req.cookies.userId;
+  Users.findOne({"userId":userId},(error,userDoc)=>{
+      if(error){
+          res.json({
+              status:"500",
+              msg:error.message,
+              result:""
+          })
+      }else{
+          if(userDoc){
+              userDoc.carList.forEach((item)=>{
+                  item.checked=allcheck;
+              })
+             userDoc.save((error,users)=>{
+              if(error){
+                  res.json({
+                      status:"500",
+                      msg:error.message,
+                      result:""
+                  });
+              }else{
+                  res.json({
+                      status:"200",
+                      msg:"suc",
+                      result:"suc"
+                  });
+              }
+             })
+          }else{
+            res.json({
+              status:"500",
+              msg:error.message,
+              result:""
+          });
+          }
+         
+      }
+  })
+})
 
 
 module.exports = router;
