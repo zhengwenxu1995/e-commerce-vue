@@ -13,13 +13,13 @@
                 <h1 class="address-title">地址列表</h1>
                 <div class="address-frame">
                     <ul class="address-list">
-                        <li class="address-item select">
+                        <li class="address-item select" v-for="item of addressList" :key="item.addressId">
                             <dl class="address-cont">
-                                <dt class="user-name">刘勇</dt>
-                                <dd class="user-address">100010北京朝阳区望京</dd>
-                                <dd class="user-tel">13619898772</dd>
+                                <dt class="user-name">{{item.userName}}</dt>
+                                <dd class="user-address">{{item.postCode+item.srteetName}}</dd>
+                                <dd class="user-tel">{{item.tel}}</dd>
                             </dl>
-                            <div class="default-select" v-if="defaultShow">
+                            <div class="default-select" v-if="item.isDefault">
                                 <span class="default-select-cur">默认选择</span>
                                 <i class="iconfont del">&#xe613;</i>
                             </div>
@@ -56,16 +56,29 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
+
     AddressList:"AddressList",
     data(){
         return {
             defaultShow:true,
-            more:true
+            more:true,
+            addressList:[]
         }
     },
     methods:{
-
+        init(){
+            axios.get("/users/address").then((res)=>{
+                let data =res.data;
+                if(data.status=="500"){
+                    console.log(data.msg)
+                }else{
+                    this.addressList=data.result;
+                    console.log(data.result)
+                }
+            })
+        }
     },
     computed:{
 
@@ -74,7 +87,7 @@ export default {
 
     },
     mounted(){
-
+        this.init()
     }
 }
 </script>
@@ -127,8 +140,10 @@ export default {
                 width :100%;
                 text-align :center;
             .after-step
+                background :#ccc;
                 border:0.02rem solid #ccc;
             .current-step
+                background :#d1434a;
                 border:0.02rem solid #d1434a;
             .after-step h2
                 color:#999;

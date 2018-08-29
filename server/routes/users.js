@@ -197,5 +197,24 @@ router.post("/careditallcheck",(req,res,next)=>{
   })
 })
 
-
+//加载地址
+router.get("/address",(req,res,next)=>{
+  // let userId=req.cookies.userId;
+  let userId="a0001";
+  Users.findOne({"userId":userId},(error,userDoc)=>{
+    if(error){
+      res.json({
+        status:"500",
+        msg:error.message,
+        result:""
+      })
+    }else{
+      res.json({
+        status:"200",
+        msg:"ok",
+        result:userDoc.addressList
+      })
+    }
+  })
+})
 module.exports = router;
