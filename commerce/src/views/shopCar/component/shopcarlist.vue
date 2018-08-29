@@ -409,4 +409,5 @@ i
         font-weight: 600;
         background :#fff;
         margin-left :0.3rem;
+
 </style>
