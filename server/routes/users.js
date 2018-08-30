@@ -199,8 +199,8 @@ router.post("/careditallcheck",(req,res,next)=>{
 
 //加载地址
 router.get("/address",(req,res,next)=>{
-  // let userId=req.cookies.userId;
-  let userId="a0001";
+  let userId=req.cookies.userId;
+  // let userId="a0001";
   Users.findOne({"userId":userId},(error,userDoc)=>{
     if(error){
       res.json({
@@ -217,4 +217,56 @@ router.get("/address",(req,res,next)=>{
     }
   })
 })
+
+
+//设置默认地址
+router.post("/setdefault",(req,res,next)=>{
+  let usersId=req.cookies.userId;
+  let addressId=req.body.addressId;
+  if(usersId==""){
+    res.json({
+      status:100,
+      msg:"",
+      result:""
+    })
+  }else{
+    Users.findOne({"userId":usersId},(error,userDoc)=>{
+      if(error){
+        res.json({
+          status:400,
+          msg:error.message,
+          result:""
+        })
+      }else{
+        userDoc.addressList.forEach((item)=>{
+          if(item.addressId==addressId){
+            item.isDefault=true;
+          }else{
+            item.isDefault=false;
+          }
+        });
+        userDoc.save((error,doc)=>{
+          if(error){
+            res.json({
+              status:400,
+              msg:error.message,
+              result:""
+            })
+          }else{
+            res.json({
+              status:200,
+              msg:"ok",
+              result:""
+            })
+          }
+        })
+      }
+    })
+  }
+  
+})
+
+
+
+
 module.exports = router;

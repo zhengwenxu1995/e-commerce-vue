@@ -13,14 +13,15 @@
                 <h1 class="address-title">地址列表</h1>
                 <div class="address-frame">
                     <ul class="address-list">
-                        <li class="address-item select" v-for="item of addressList" :key="item.addressId">
+                        <li class="address-item" v-bind:class="{select:index==selectNow}"  v-for="(item,index) of addressListFilter" :key="item.addressId" @click="setSelect(index)">
                             <dl class="address-cont">
                                 <dt class="user-name">{{item.userName}}</dt>
                                 <dd class="user-address">{{item.postCode+item.srteetName}}</dd>
                                 <dd class="user-tel">{{item.tel}}</dd>
                             </dl>
-                            <div class="default-select" v-if="item.isDefault">
-                                <span class="default-select-cur">默认选择</span>
+                            <div class="default-select">
+                                <span class="default-select-cur" v-if="item.isDefault">默认选择</span>
+                                <span class="default-select-set" v-if="!item.isDefault" @click="setDefault(item.addressId)">设置默认</span>
                                 <i class="iconfont del">&#xe613;</i>
                             </div>
                         </li>
@@ -36,8 +37,10 @@
                         </li>
                     </ul>
                     <div class="more-segm">
-                        <span class="more-cont">more</span>
-                        <i v-if="more" class="iconfont more">&#xe60b;</i><i v-if="!more" class="iconfont more">&#xe60b;</i>
+                        <a href="javascript:;" @click="expandAddress">
+                            <span class="more-cont">more</span>
+                            <i v-if="more" class="iconfont more">&#xe60b;</i><i v-if="!more" class="iconfont more">&#xe60b;</i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -52,6 +55,10 @@
                 </div>
             </div>
         </div>
+        <div>
+            <a href="javascript:;" class="next">下一步</a>
+            <!-- <router-link :to="{附加费}">下一步</router-link> -->
+        </div>
     </div>
 </template>
 
@@ -62,9 +69,11 @@ export default {
     AddressList:"AddressList",
     data(){
         return {
+            limit:3,
             defaultShow:true,
             more:true,
-            addressList:[]
+            addressList:[],
+            selectNow:0
         }
     },
     methods:{
@@ -78,10 +87,36 @@ export default {
                     console.log(data.result)
                 }
             })
+        },
+        expandAddress(){
+            if(this.limit===3){
+                this.limit=this.addressList.length;
+            }else{
+                this.limit=3;
+            }
+        },
+        setSelect(index){
+            this.selectNow=index;
+        },
+        setDefault(addressId){
+            let params={
+                addressId:addressId
+            }
+            axios.post("/users/setdefault",params).then((res)=>{
+                // console.log(res)
+                let data=res.data;
+                if(data.status==200){
+                    console.log("删除成功！");
+                    //重新加载数据
+                    this.init();
+                }
+            })
         }
     },
     computed:{
-
+        addressListFilter(){
+            return this.addressList.slice(0,this.limit)
+        }
     },
     components:{
 
@@ -165,41 +200,47 @@ export default {
             width :5.2rem;
             padding:0.5rem 0.5rem 0.8rem 0.5rem;
             border:0.04rem solid #e9e9e9;
-            margin :0 0.3rem 0.3rem 0 ;
+            margin :0 1.2rem 0.3rem 0 ;
             position :relative;
             cursor :pointer;
             background :#fff;
         .address-list .select
             border :0.04rem solid #ee7a23;
-            .address-cont
-                padding : 0;
-            .address-cont .user-name
-                font-size :0.34rem;
-                padding-bottom : 0.1rem;
-                color:#333;
-            .address-cont .user-address
-                font-size :0.3rem;
-                color:#333;
-                padding-top :0.1rem
-                margin-bottom :0.2rem;
-            .address-cont .user-tel
-                font-size:0.3rem;
-                padding-top :0.4rem;
-            .default-select
-                position :absolute;
-                width :5.5rem;;
-                bottom :0.3rem;
-                font-size :0.32rem;
-                line-height :0.6rem;
-                .default-select-cur
-                    float:left;
-                    color :#ee7a23
-                .del
-                    display :inline-block;
-                    float:right;
-                    font-size :.6rem;
-                .del:hover
-                    color :#ee7a23;
+        .address-cont
+            padding : 0;
+        .address-cont .user-name
+            font-size :0.34rem;
+            padding-bottom : 0.1rem;
+            color:#333;
+        .address-cont .user-address
+            font-size :0.3rem;
+            color:#333;
+            padding-top :0.1rem
+            margin-bottom :0.2rem;
+        .address-cont .user-tel
+            font-size:0.3rem;
+            padding-top :0.4rem;
+        .default-select
+            position :absolute;
+            width :5.5rem;;
+            bottom :0.3rem;
+            font-size :0.32rem;
+            line-height :0.6rem;
+            .default-select-cur
+                float:left;
+                color :#ee7a23
+            .default-select-set
+                float:left;
+                color :#ee7a23
+                display :none;
+        .address-item:hover .default-select-set
+            display :inline;
+        .del
+            display :inline-block;
+            float:right;
+            font-size :.6rem;
+            .del:hover
+                color :#ee7a23;
         .add-address
             text-align :center;
          .address-list .add-address:hover

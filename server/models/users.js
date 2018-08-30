@@ -19,12 +19,12 @@ let usersSchema=new Schema({
     ],
     "addressList":[
         {
-            "addressId":String,
+            "addressId":Number,
             "userName":String,
             "srteetName":String,
             "postCode":String,
             "tel":String,
-            "isDefault":String
+            "isDefault":Boolean
         }
     ]
 });
