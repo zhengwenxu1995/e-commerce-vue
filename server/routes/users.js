@@ -265,7 +265,26 @@ router.post("/setdefault",(req,res,next)=>{
   }
   
 })
-
+//删除地址
+router.post("/deldefault",(req,res,next)=>{
+  let userId=req.cookies.userId;
+  let addressId=req.body.addressId;
+  Users.updateMany({"userId":userId},{$pull:{"addressList":{"addressId":addressId}}},(error,addressDoc)=>{
+    if(error){
+      res.json({
+        status:100,
+        msg:error.message,
+        result:""
+      });
+    }else{
+      res.json({
+        status:200,
+        msg:"ok",
+        result:"suc"
+      })
+    }
+  })
+})
 
 
 

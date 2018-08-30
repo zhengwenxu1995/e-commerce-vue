@@ -22,7 +22,7 @@
                             <div class="default-select">
                                 <span class="default-select-cur" v-if="item.isDefault">默认选择</span>
                                 <span class="default-select-set" v-if="!item.isDefault" @click="setDefault(item.addressId)">设置默认</span>
-                                <i class="iconfont del">&#xe613;</i>
+                                <i class="iconfont del" @click="delAddress(item.addressId)">&#xe613;</i>
                             </div>
                         </li>
                        
@@ -54,11 +54,14 @@
                     </dl>
                 </div>
             </div>
+
+            <div class="next-cont">
+                <a href="javascript:;" class="next-btn">下一步</a>
+                <!-- <router-link :to="{附加费}">下一步</router-link> -->
+            </div>
+
         </div>
-        <div>
-            <a href="javascript:;" class="next">下一步</a>
-            <!-- <router-link :to="{附加费}">下一步</router-link> -->
-        </div>
+        
     </div>
 </template>
 
@@ -110,6 +113,22 @@ export default {
                     //重新加载数据
                     this.init();
                 }
+            })
+        },
+        delAddress(addressId){
+            let params= {
+                addressId:addressId
+            }
+            axios.post("/users/deldefault",{addressId}).then((res)=>{
+                // console.log(res);
+                let data=res.data;
+                if(data.status=200){
+                    this.init();
+                    console.log("删除地址成功！")
+                }else{
+                    console.log("删除地址失败");
+                }
+                
             })
         }
     },
@@ -198,9 +217,9 @@ export default {
             float :left;
             height :2rem;
             width :5.2rem;
-            padding:0.5rem 0.5rem 0.8rem 0.5rem;
+            padding:0.5rem 0.6rem 0.9rem 0.6rem;
             border:0.04rem solid #e9e9e9;
-            margin :0 1.2rem 0.3rem 0 ;
+            margin :0 1.3rem 0.3rem 0 ;
             position :relative;
             cursor :pointer;
             background :#fff;
@@ -294,4 +313,15 @@ export default {
                 font-weight :600;
             .note
                 font-size :0.3rem;
+    .next-cont
+        overflow :hidden;
+        margin-top :1rem;
+        .next-btn
+            display :inline-block;
+            float :right;
+            padding : 0.4rem 0.6rem;
+            font-size:0.32rem;
+            color:#fff;
+            font-weight :600;
+            background:#d1434a;
 </style>
