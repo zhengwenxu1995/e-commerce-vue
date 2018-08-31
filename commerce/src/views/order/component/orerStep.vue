@@ -4,7 +4,7 @@
             <div class="step-cont">
                 <ul class="step-list">
                     <li class="current-step"><h2 class="current-title">邮寄地址</h2></li>
-                    <li class="after-step"><h2 class="after-title">查看订单</h2></li>
+                    <li class="current-step"><h2 class="current-title">查看订单</h2></li>
                     <li class="after-step"><h2 class="after-title">付款</h2></li>
                     <li class="after-step"><h2 class="after-title">订单确认</h2></li>
                 </ul>
@@ -37,7 +37,7 @@ export default {
 .parent-frame
     width :100%;
     background :#f5f7fc;
-    padding:0.8rem 0 2rem 0;
+    padding:0.8rem 0 0rem 0;
     .child-frame
         width :80%;
         margin :0 auto;

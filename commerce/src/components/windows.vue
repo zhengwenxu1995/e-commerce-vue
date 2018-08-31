@@ -33,7 +33,7 @@ export default {
     width :100%;
     background :rgba(0,0,0,.5);
     position :fixed;
-    z-index:2;
+    z-index:10;
     top:0;
     left :0;
     .win-frame

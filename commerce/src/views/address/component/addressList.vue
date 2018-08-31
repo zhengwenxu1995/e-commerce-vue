@@ -22,7 +22,7 @@
                             <div class="default-select">
                                 <span class="default-select-cur" v-if="item.isDefault">默认选择</span>
                                 <span class="default-select-set" v-if="!item.isDefault" @click="setDefault(item.addressId)">设置默认</span>
-                                <i class="iconfont del" @click="delAddress(item.addressId)">&#xe613;</i>
+                                <i class="iconfont del" @click="showWin(item.addressId)">&#xe613;</i>
                             </div>
                         </li>
                        
@@ -56,17 +56,27 @@
             </div>
 
             <div class="next-cont">
-                <a href="javascript:;" class="next-btn">下一步</a>
-                <!-- <router-link :to="{附加费}">下一步</router-link> -->
+                <!-- <a href="javascript:;" class="next-btn">下一步</a> -->
+                <router-link :to="{path:'/orderview'}" class="next-btn">下一步</router-link>
             </div>
 
         </div>
         
+        <transition name="windows">
+            <windows v-if="delShowFrame" @closeWin="closeWin">
+                <div slot="cont" class="delMsg-cont">
+                    <p class="delMsg">确定要删除此项商品！</p>
+                    <a href="JavaScript:void(0)" class="delSubmit" @click="delAddress">确定</a>
+                    <a href="JavaScript:void(0)" class="delClose" @click="showWin">取消</a>
+                </div>
+            </windows>
+        </transition>
     </div>
 </template>
 
 <script>
 import axios from "axios"
+import windows from "@/components/windows.vue" 
 export default {
 
     AddressList:"AddressList",
@@ -76,7 +86,9 @@ export default {
             defaultShow:true,
             more:true,
             addressList:[],
-            selectNow:0
+            selectNow:0,
+            delShowFrame:false,
+            deladdressId:''
         }
     },
     methods:{
@@ -115,16 +127,32 @@ export default {
                 }
             })
         },
-        delAddress(addressId){
+        //现实删除框
+        showWin(addressId){
+           if(this.delShowFrame){
+               this.delShowFrame=false;
+               this.deladdressId="";
+           }else{
+               this.deladdressId=addressId;
+               this.delShowFrame=true;
+           }
+            
+        },
+        //关闭删除框
+        closeWin(val){
+            this.delShowFrame=val;
+        },
+        delAddress(){
             let params= {
-                addressId:addressId
+                addressId:this.deladdressId
             }
-            axios.post("/users/deldefault",{addressId}).then((res)=>{
+            axios.post("/users/deldefault",params).then((res)=>{
                 // console.log(res);
                 let data=res.data;
                 if(data.status=200){
                     this.init();
                     console.log("删除地址成功！")
+                    this.delShowFrame=false;
                 }else{
                     console.log("删除地址失败");
                 }
@@ -138,7 +166,7 @@ export default {
         }
     },
     components:{
-
+        windows
     },
     mounted(){
         this.init()
@@ -208,6 +236,7 @@ export default {
             .address-title
                 font-size :0.5rem;
                 padding-bottom :0.4rem;
+                color :#333;
     .address-frame
         width :100%;
         .address-list
@@ -319,9 +348,51 @@ export default {
         .next-btn
             display :inline-block;
             float :right;
-            padding : 0.4rem 0.6rem;
+            padding : 0.3rem 0.9rem;
             font-size:0.32rem;
             color:#fff;
             font-weight :600;
             background:#d1434a;
+.windows-enter-active 
+        transition: all .3s ease;
+    .windows-leave-active 
+        transition: all .8s ease;
+    .windows-enter, .windows-leave-to 
+        transform :translateY(0.12rem);
+        opacity :0;
+ .delMsg-cont
+    padding :0.5rem 1rem 0 1rem;
+    margin-top:0.6rem;
+    text-align :center;
+    .delMsg
+        text-align :center;
+        font-size :0.36rem;
+        padding-bottom:0.5rem;
+        letter-spacing :0.05rem;
+        margin-bottom :0.8rem;
+        font-family :Microsoft YaHei;
+    .delClose
+        display :inline-block;
+        margin-left  :0.5rem;
+        line-height :0.8rem;
+        height :0.8rem;
+        border:0.02rem solid #d1434a;
+        padding:0 1.5rem;
+        color:#fff;
+        cursor :pointer;
+        font-weight: 600;
+        background :#db4f45;
+    .delSubmit
+        display :inline-block;
+        margin-right :0.5rem;
+        line-height :0.8rem;
+        height :0.8rem;
+        border:0.02rem solid #d1434a;
+        padding:0 1.5rem;
+        color:#dd7479;
+        cursor :pointer;
+        font-weight: 600;
+        background :#fff;
+        margin-left :0.3rem;
+
 </style>
