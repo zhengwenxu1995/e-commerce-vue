@@ -57,7 +57,7 @@
 
             <div class="next-cont">
                 <!-- <a href="javascript:;" class="next-btn">下一步</a> -->
-                <router-link :to="{path:'/orderview'}" class="next-btn">下一步</router-link>
+                <router-link :to="{path:'/orderview',query:{'addressId':this.selectAddressId}}" class="next-btn">下一步</router-link>
             </div>
 
         </div>
@@ -85,7 +85,7 @@ export default {
             limit:3,
             defaultShow:true,
             more:true,
-            addressList:[],
+            addressList:[{addressId:""}],
             selectNow:0,
             delShowFrame:false,
             deladdressId:''
@@ -99,7 +99,7 @@ export default {
                     console.log(data.msg)
                 }else{
                     this.addressList=data.result;
-                    console.log(data.result)
+                    // console.log(data.result)
                 }
             })
         },
@@ -112,6 +112,8 @@ export default {
         },
         setSelect(index){
             this.selectNow=index;
+            // this.selectAddressId=selectAddressId;
+            // console.log(this.selectAddressId+"FF")
         },
         setDefault(addressId){
             let params={
@@ -163,6 +165,10 @@ export default {
     computed:{
         addressListFilter(){
             return this.addressList.slice(0,this.limit)
+        },
+        selectAddressId(){
+            // console.log(this.addressList[this.selectNow].addressId)
+            return this.addressList[this.selectNow].addressId;
         }
     },
     components:{

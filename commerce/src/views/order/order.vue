@@ -1,7 +1,7 @@
 <template>
     <div class="cont">
         <headers></headers>
-        <nav-cont></nav-cont>
+        <nav-cont><span slot="navShow">查看订单</span></nav-cont>
         <order-step></order-step>
         <order-list></order-list>
         <foot></foot>

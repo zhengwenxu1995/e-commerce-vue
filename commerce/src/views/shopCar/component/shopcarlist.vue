@@ -78,7 +78,7 @@ export default {
     },
     //过滤器  局部的
     // filters:{
-    //     // 过滤器名字：function （）{
+    //     // 过滤器名字：function (参数){
     //     //     处理数据
     //     // }
     //     currency:currency

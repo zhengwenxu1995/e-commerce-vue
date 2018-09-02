@@ -4,6 +4,7 @@ import Home from '@/views/Home/home.vue'
 import ShopCar from "@/views/shopCar/shopCar.vue"
 import Address from "@/views/address/address.vue"
 import OrderView from "@/views/order/order.vue"
+import OrderSuccess from "@/views/orderSuccess/orderSuccess.vue"
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
         path: '/orderview',
         name: 'OrderView',
         component: OrderView
+    },
+    {
+        path: '/ordersuccess',
+        name: 'OrderSuccess',
+        component: OrderSuccess
     }
     ],
     mode: "history"

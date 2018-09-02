@@ -285,7 +285,55 @@ router.post("/deldefault",(req,res,next)=>{
     }
   })
 })
+//查询定订单
+router.get("/order",(req,res,next)=>{
+  let userId=req.cookies.userId;
+  Users.findOne({"userId":userId},(error,orderDoc)=>{
+    if(error){
+      res.json({
+        status:500,
+        msg:error.message,
+        result:""
+      })
+    }else{
+      let orderList=[];
+      orderDoc.carList.forEach((item)=>{
+        if(item.checked==1){
+          orderList.push(item);
+        }
+      })
+      res.json({
+        status:200,
+        msg:"ok",
+        result:orderList
+      })
+    }
+  })
+})
+// 添加订单
+router.post("/addorder",(req,res,next)=>{
+  let orderId=req.body.addressId;
+  let userId=req.cookies.userId;
+  let totalPrice=req.body.totalPrice;
+  console.log(" ding"+orderId+"yonghu"+userId+"zhongjia"+totalPrice);
+  Users.findOne({"userId":userId},(error,userDoc)=>{
+    if(error){
+      res.json({
+        status:1,
+        msg:error.message,
+        result:""
+      })
+    }else{
+      if(userDoc){
 
-
-
+      }else{
+        res.json({
+          status:1,
+          msg:"没有找到用户",
+          result:""
+        })
+      }
+    }
+  })
+})
 module.exports = router;

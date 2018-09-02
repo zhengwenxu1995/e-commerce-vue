@@ -80,7 +80,7 @@ export default {
     width :100%;
     background :rgba(0,0,0,.5);
     position :fixed;
-    z-index:2;
+    z-index:6;
     .login-frame
         top:50%;
         left :50%;
