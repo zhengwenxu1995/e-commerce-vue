@@ -316,7 +316,6 @@ router.post("/addorder",(req,res,next)=>{
   let orderId=req.body.addressId;
   let userId=req.cookies.userId;
   let totalPrice=req.body.totalPrice;
-  console.log(" ding"+orderId+"yonghu"+userId+"zhongjia"+totalPrice);
   Users.findOne({"userId":userId},(error,userDoc)=>{
     if(error){
       res.json({
@@ -377,6 +376,51 @@ router.post("/addorder",(req,res,next)=>{
         res.json({
           status:2,
           msg:"没有找到用户",
+          result:""
+        })
+      }
+    }
+  })
+});
+//获取订单信息
+router.get("/getorder",(req,res,next)=>{
+  let userId=req.cookies.userId,orderId=req.param("orderId");
+  console.log(orderId)
+  Users.findOne({"userId":userId},(error,userDoc)=>{
+    if(error){
+      res.json({
+        status:1, 
+        msg:error.message,
+        result:""
+      })
+    }else{
+      if(userDoc){
+        console.log(userDoc.orderList)
+        userDoc.orderList.forEach((item)=>{
+          if(item.orderId==orderId){
+            res.json({
+              status:200,
+              msg:"ok",
+              result:{
+                orderId:item.orderId,
+                orderTotal:item.orderTotal
+              }
+            })
+          }else{
+            res.json({
+              status:4,
+              msg:"forEach报错",
+              result:{
+                orderId:"0",
+                orderTotal:0
+              }
+            })
+          }
+        })
+      }else{
+        res.json({
+          status:2,
+          msg:"没有找到数据",
           result:""
         })
       }

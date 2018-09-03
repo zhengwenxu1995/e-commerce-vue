@@ -87,7 +87,6 @@ import axios from "axios"
                                  orderTotal:data.result.orderTotal
                                 }
                              })
-                             console.log(data.result.orderId+ ""+data.result.orderTotal)
                      }
                  })
             }

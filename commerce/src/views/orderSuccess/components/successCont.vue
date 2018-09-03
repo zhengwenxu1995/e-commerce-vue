@@ -7,7 +7,7 @@
             <div class="suc-details">
                 <h1 class="suc-title">您已经购买成功！</h1>
                 <h1 class="suc-title">您的订单正在处理中！</h1>
-                <p class="order-suc"><span class="order-id">订单编号:</span><em class="id-cont">{{this.orderId}}</em><span class="order-total">订单金额:</span><em class="order-money">{{orderTotal}}</em></p>
+                <p class="order-suc"><span class="order-id">订单编号:</span><em class="id-cont">{{orderId}}</em><span class="order-total">订单金额:</span><em class="order-money">{{orderTotal | currency("￥",2)}}</em></p>
             </div>
             <dir class="order-suc-btn">
                 <router-link class="shop-car" to="/shopcar">购物车</router-link>
@@ -30,8 +30,22 @@ export default {
     },
     methods:{
         init(){
-
-           axios.get("/",)
+            let params={
+                orderId:this.$route.query.orderId
+            }
+            axios.get("users/getorder",{params}).then((res)=>{
+                
+                if(res.status==200){
+                    let data=res.data;
+                    console.log(data)
+                    if(data.result){
+                        this.orderId=data.result.orderId;
+                        this.orderTotal=data.result.orderTotal;
+                    }
+                }else{
+                    console.log("后台报错了")
+                }
+            })
         }
     },
     props:{
