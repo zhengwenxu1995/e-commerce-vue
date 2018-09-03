@@ -8,12 +8,12 @@ let usersSchema=new Schema({
     "userPwd":String,
     "orderList":[
         {
-            orderId:String,
-            orderTotal:Number,
-            addressInfo:Object,
-            goodsList:Object,
-            orderStatus:String,
-            createDate:String
+            "orderId":String,
+            "orderTotal":Number,
+            "addressInfo":Object,
+            "goodsList":Object,
+            "orderStatus":String,
+            "createDate":String
         }
     ],
     "carList":[

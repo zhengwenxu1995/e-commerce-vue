@@ -76,9 +76,18 @@ import axios from "axios"
                     totalPrice:this.totalPrice
                 }
                 axios.post("/users/addorder",params).then((res)=>{
-                     let data=res.result;
+                     let data=res.data;
+                     console.log(data)
                      if(data.status==200){
-                         router.push({ path: '/orderview' })
+                        // this.$router.push({ name: 'user', params: { userId: 123 }})
+                         this.$router.push({ 
+                             path:'/ordersuccess',
+                             query: { 
+                                 orderId:data.result.orderId,
+                                 orderTotal:data.result.orderTotal
+                                }
+                             })
+                             console.log(data.result.orderId+ ""+data.result.orderTotal)
                      }
                  })
             }

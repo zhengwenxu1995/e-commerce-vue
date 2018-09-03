@@ -221,10 +221,12 @@ export default {
       }
       axios.post("/goods/addShopCar",addShopCarParam).then((res)=>{
         let data=res.data;
+        console.log(data)
         if(data.result=="success"){
           this.msgCar=data.msg;
           this.addCarSu=true;
         }else{
+          console.log(data)
           this.msgCar=data.msg;
           this.addCarRe=true;
         }

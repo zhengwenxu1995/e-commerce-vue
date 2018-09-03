@@ -1,0 +1,142 @@
+mysql 导出数据库：
+
+mysqldump -u root -p uulo > /home/only/dbname.sql
+
+mysqldump -u root -p : 导出命令
+
+uulo ：要到导出的数据库名；
+
+/home/only/ ： 导出后存放的路径。
+
+dbname : 导出后的名字（可以更改，也可以不更改）。
+
+
+mysql 导入数据库：
+
+mysql -u root -p xxdiandeng < /home/only/dbname.sql
+
+
+查看数据库表信息：
+
+DESC 表名;   查看表结构。
+
+----------------------------- centos 安装 mysql --------------------------------
+
+一. 通过 yum 安装
+
+1. 配置YUM源 
+在MySQL官网中下载YUM源rpm安装包：http://dev.mysql.com/downloads/repo/yum/ 
+
+下载mysql源安装包 
+wget http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm
+
+安装mysql源
+yum localinstall mysql57-community-release-el7-8.noarch.rpm
+
+检查mysql源是否安装成功
+ yum repolist enabled | grep "mysql.*-community.*"
+
+可以修改vim /etc/yum.repos.d/mysql-community.repo源，改变默认安装的mysql版本。比如要安装5.6版本，将5.7源的enabled=1改成enabled=0。然后再将5.6源的enabled=0改成enabled=1即可。
+
+2. 安装 MYSQL
+yum install mysql-community-server
+
+3. 启动MySQL服务
+systemctl start mysqld
+
+4. 开机启动
+systemctl enable mysqld
+systemctl daemon-reload
+
+5. 修改root本地登录密码
+mysql安装完成之后，在/var/log/mysqld.log文件中给root生成了一个默认密码。通过下面的方式找到root默认密码，然后登录mysql进行修改：
+grep 'temporary password' /var/log/mysqld.log
+mysql -uroot -p
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!'; 
+
+6. 配置默认编码为utf8
+修改/etc/my.cnf配置文件，在[mysqld]下添加编码配置，如下所示：
+
+[mysqld]
+character_set_server=utf8
+init_connect='SET NAMES utf8'
+
+7. 默认配置文件路径： 
+配置文件：/etc/my.cnf 
+日志文件：/var/log//var/log/mysqld.log 
+服务启动脚本：/usr/lib/systemd/system/mysqld.service 
+socket文件：/var/run/mysqld/mysqld.pid
+
+
+
+------------------------ CentOS7离线安装MySQL ----------------------------------
+
+
+
+1.删除原有的mariadb，不然mysql装不进去
+
+mariadb-libs-5.5.52-1.el7.x86_64
+
+rpm -qa|grep mariadb
+
+rpm -e --nodeps mariadb-libs
+
+ 
+
+1.在https://dev.mysql.com/downloads/mysql/选择为Red Hat Enterprise Linux 7 / Oracle Linux 7 ，把os的版本选择为all。 
+
+直接下载mysql-5.7.21-1.el7.x86_64.rpm-bundle.tar，所有的rpm包都在里面
+
+rpm -ivh mysql-community-common-5.7.21-1.el7.x86_64.rpm
+
+rpm -ivh mysql-community-libs-5.7.21-1.el7.x86_64.rpm
+
+rpm -ivh mysql-community-devel-5.7.21-1.el7.x86_64.rpm
+
+rpm -ivh mysql-community-libs-compat-5.7.21-1.el7.x86_64.rpm
+
+rpm -ivh mysql-community-client-5.7.21-1.el7.x86_64.rpm
+
+rpm -ivh mysql-community-server-5.7.21-1.el7.x86_64.rpm
+
+至此，mysql5.7所有文件安装完毕，接下来就是开启服务测试了。 
+
+1.首先关闭mysql服务：
+
+service mysqld stop
+
+2.然后修改配置文件：
+vim /etc/my.cnf
+
+3.接下来加入一句代码即可空密码登录mysql：
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+skip-grant-tables     #添加这句话，这时候登入mysql就不需要密码
+symbolic-links=0
+
+4.开启mysql服务：
+service mysqld start
+
+5.空密码登录mysql：
+
+mysql -u root -p    #输入命令回车进入，出现输入密码提示直接回车
+6.设置mysql密码：
+
+mysql> set password for root@localhost = password('123456');
+ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+mysql> flush privileges;  #更新权限
+Query OK, 0 rows affected (0.00 sec)
+mysql> set password for root@localhost = password('123456'); 
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql>flush privileges; #更新权限
+mysql>quit; #退出
+service mysqld stop # 停止mysql服务, 恢复mysql配置
+vim /etc/my.cnf     #修改配置文件
+# Disabling symbolic-links is recommended to prevent assorted security risks
+# skip-grant-tables # 注释掉这句话
+symbolic-links=0
+service mysqld start # 启动mysql服务
+mysql -uroot -p # 输入新密码登录
+
+7.设置mysql开机自启：
+systemctl enable mysqld

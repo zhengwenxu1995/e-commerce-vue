@@ -134,7 +134,7 @@ router.post("/addShopCar",function (request,response,next){
                             })
                         }else{
                             if(goodsDoc1){
-                                let newGoods={
+                                let newGoods={  
                                     checked:1,
                                     productNum:1,
                                     productId: goodsDoc1.productId,
@@ -162,6 +162,12 @@ router.post("/addShopCar",function (request,response,next){
                     })
                 }
                 
+            }else{
+                response.json({
+                    status:1,
+                    msg:"接口数据为空",
+                    result:""
+                });
             }
             
         }

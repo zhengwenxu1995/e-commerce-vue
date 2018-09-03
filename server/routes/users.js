@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let Users=require("../models/users.js");
+require("../util/util.js")
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
 //   res.send('我是二级路由users');
@@ -324,11 +325,57 @@ router.post("/addorder",(req,res,next)=>{
         result:""
       })
     }else{
+      let address=[],orderShop=[];
       if(userDoc){
-
+        userDoc.carList.forEach((item)=>{
+          if(item.checked==1){
+            orderShop.push(item)
+          }
+        })
+        userDoc.addressList.forEach((item)=>{
+          if(item.isDefault==true){
+            address.push(item)
+          }
+        })
+        let r1=Math.ceil(Math.random()*10);
+        let r2=Math.ceil(Math.random()*10);
+        let systemTime=new Date().Format("yyyyMMddhhmmss");
+        let orderCreateTime=new Date().Format("yyyy-MM-dd hh-mm-ss")
+        let order={
+            orderId:"622"+r1+systemTime+r2,
+            orderTotal:totalPrice,
+            addressInfo:address,
+            goodsList:orderShop,
+            orderStatus:"1",
+            createDate:orderCreateTime
+        }
+        userDoc.orderList.push(order);
+        userDoc.save((error,saveDoc)=>{
+          if(error){
+            res.json({
+              status:3,
+              msg:"保存失败",
+              result:""
+            })
+          }else{
+            if(saveDoc){
+              res.json({
+                status:200,
+                msg:"保存成功",
+                result:order
+              })
+            }else{
+              res.json({
+                status:4,
+                msg:"失败成功",
+                result:""
+              })
+            }
+          }
+        })
       }else{
         res.json({
-          status:1,
+          status:2,
           msg:"没有找到用户",
           result:""
         })
