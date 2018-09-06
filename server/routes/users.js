@@ -427,4 +427,36 @@ router.get("/getorder",(req,res,next)=>{
     }
   })
 })
+//获取购物车数量
+router.get("/shopcarcount",(req,res,next)=>{
+  let userId=req.cookies.userId;
+  let shopCar=0;
+  Users.findOne({"userId":userId},(error,userDoc)=>{
+    if(error){
+      res.json({
+        status:1,
+        msg:error.messages,
+        result:""
+      })
+    }else{
+      if(userDoc){
+        userDoc.carList.forEach((item)=>{
+          shopCar +=item.productNum;
+        })
+        res.json({
+          status:200,
+          msg:"ok",
+          result:shopCar
+        })
+      }else{
+        res.json({
+          status:2,
+          msg:"没有找到用户id",
+          result:""
+        })
+      }
+    }
+  })
+  
+})
 module.exports = router;

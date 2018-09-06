@@ -35,6 +35,14 @@ export default {
 
     },
     methods:{
+        getShopCar(){
+          axios.get("/users/shopcarcount").then((res)=>{
+              let data = res.data;
+              if(res.status==200){
+                  this.$store.state.shopCarCount=data.result;
+              }
+          })
+      },
         loginWinShow(){
             this.shows=false;
             this.$emit("loginShow",this.shows)
@@ -57,6 +65,7 @@ export default {
                     this.errorShow=true;
                     
                 }else{
+                    this.getShopCar();
                     this.errorShow=false;
                     this.shows=false;
                     let loginIn={

@@ -3,17 +3,17 @@
     <div class="header-cont">
         <div class="left">
             <router-link to="/">
-                <img src="http://imooc.51purse.com/static/logo1.png" alt="">
+                <!-- <img src="http://imooc.51purse.com/static/logo1.png" alt=""> -->
             </router-link>
         </div>
         <div class="right">
             <span class="userName" v-if="loginCStatus">{{userNames}}</span>
             <a class="out-login" v-if="loginCStatus" href="javascript:" @click="outLogin">退出登录</a>
             <span class="login" @click="showLoginWin" v-if="!loginCStatus">登录</span>
-            <i class="number">
-                    1
+            <i class="number" v-if="shopCarCount>0">
+                    {{shopCarCount}}
             </i>
-            <span class="iconfont shopCar">
+            <span class="iconfont shopCar" @click="shopCar">
                &#xe603;
             </span>
         </div>
@@ -40,7 +40,13 @@ export default {
   components:{
     LoginWind:LoginWind
   },
+  computed:{
+      shopCarCount(){
+          return this.$store.state.shopCarCount;
+      }
+  },
   methods:{
+      
       showLogin(val){
          this.show=val;
       },
@@ -57,10 +63,19 @@ export default {
               if(res.status=="200"){
                     this.loginCStatus=false,
                     this.userNames=""
+                    this.$store.state.shopCarCount=0;
              }else{
                  console.log("退出异常")
               }
          })
+      },
+      getShopCar(){
+          axios.get("/users/shopcarcount").then((res)=>{
+              let data = res.data;
+              if(res.status==200){
+                  this.$store.state.shopCarCount=data.result;
+              }
+          })
       },
       init(){
         axios.post("/users/loginstatus").then((res)=>{
@@ -68,14 +83,20 @@ export default {
           if(data.msg=="success"){
             this.loginCStatus=true;
             this.userNames=data.relute.userName;
+            this.getShopCar()
           }else{
             this.loginCStatus=false;
           }
         })
+      },
+      shopCar(){
+          this.$router.push({
+              path:"/shopcar"
+          })
       }
   },
   mounted(){
-      this.init()
+      this.init();
   }
 }
 </script>

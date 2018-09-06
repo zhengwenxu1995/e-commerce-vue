@@ -8,7 +8,7 @@ import "@/assets/style/iconfont.css"
 import VueLazyload from "vue-lazyload"
 import infiniteScroll from "vue-infinite-scroll"
 import {currency} from "@/util/currency.js" 
-
+import { store } from "@/store/store.js"
 
 Vue.config.productionTip = false
 var VueCookie = require('vue-cookie')
@@ -23,6 +23,7 @@ Vue.use(VueLazyload, {
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })

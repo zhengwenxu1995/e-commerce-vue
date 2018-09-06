@@ -214,7 +214,7 @@ export default {
     }, 
     //加入购物车
     addShopCar (productId){
-      console.log(this.getCookie("userId"))
+     // console.log(this.getCookie("userId"))
       let addShopCarParam={
         productId:productId,
         userId:this.$cookie.get("userId")
@@ -225,6 +225,7 @@ export default {
         if(data.result=="success"){
           this.msgCar=data.msg;
           this.addCarSu=true;
+          this.$store.commit("addShopCarCount",1)
         }else{
           console.log(data)
           this.msgCar=data.msg;

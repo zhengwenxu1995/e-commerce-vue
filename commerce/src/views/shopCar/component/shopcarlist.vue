@@ -25,7 +25,7 @@
                         <span class="sum-number">{{(item.productPrice*item.productNum) | currency("$",2)}}</span>
                     </li>
                     <li class="del-btn">
-                        <a href="javascript:void(0)" @click="showWin(item.productId)">
+                        <a href="javascript:void(0)" @click="showWin(item.productId,item.productNum)">
                             <i class="iconfont delete-btn">&#xe613;</i>
                         </a>
                     </li>
@@ -73,7 +73,8 @@ export default {
             // allCheck:true,
             shopCar:[],
             delShowFrame:false,
-            delCommerceId:""
+            delCommerceId:"",
+            delQuantity:0
         }
     },
     //过滤器  局部的
@@ -102,6 +103,8 @@ export default {
                  if(data.status==200){
                      this.delShowFrame=false;
                      this.getShopCar();
+                     this.$store.commit("backShopCarCount",this.delQuantity)
+                     console.log(this.delQuantity)
                     // this.shopCar.forEach(element => {
                     //     if(element.productId){
                     //         this.shopCar.pop(element)
@@ -111,12 +114,14 @@ export default {
              })
          },
         //显示删除框
-       showWin(productId){
+       showWin(productId,delQuantity){
            if(this.delShowFrame){
                this.delShowFrame=false;
                this.delCommerceId="";
+               this.delQuantity=0;
            }else{
                this.delCommerceId=productId;
+               this.delQuantity=delQuantity
                this.delShowFrame=true;
            }
             
@@ -142,11 +147,13 @@ export default {
         carEdit(symb,item){
             if(symb=='+'){
                 item.productNum++;
+                this.$store.commit("addShopCarCount",1)
             }else if(symb=='-'){
                 if(item.productNum==1){
                     return;
                 }else{
                     item.productNum--;
+                    this.$store.commit("backShopCarCount",1)
                 }
             }else{
                 item.checked=item.checked=='1'?'0':'1';
