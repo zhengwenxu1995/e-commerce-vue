@@ -385,7 +385,7 @@ router.post("/addorder",(req,res,next)=>{
 //获取订单信息
 router.get("/getorder",(req,res,next)=>{
   let userId=req.cookies.userId,orderId=req.param("orderId");
-  console.log(orderId)
+  // console.log(orderId)
   Users.findOne({"userId":userId},(error,userDoc)=>{
     if(error){
       res.json({
@@ -397,6 +397,7 @@ router.get("/getorder",(req,res,next)=>{
       if(userDoc){
         console.log(userDoc.orderList)
         userDoc.orderList.forEach((item)=>{
+          // console.log(item.orderId)
           if(item.orderId==orderId){
             res.json({
               status:200,
@@ -406,15 +407,7 @@ router.get("/getorder",(req,res,next)=>{
                 orderTotal:item.orderTotal
               }
             })
-          }else{
-            res.json({
-              status:4,
-              msg:"forEach报错",
-              result:{
-                orderId:"0",
-                orderTotal:0
-              }
-            })
+            console.log("aaa")
           }
         })
       }else{

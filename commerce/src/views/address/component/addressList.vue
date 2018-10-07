@@ -65,7 +65,7 @@
         <transition name="windows">
             <windows v-if="delShowFrame" @closeWin="closeWin">
                 <div slot="cont" class="delMsg-cont">
-                    <p class="delMsg">确定要删除此项商品！</p>
+                    <p class="delMsg">确定要删除此项地址！</p>
                     <a href="JavaScript:void(0)" class="delSubmit" @click="delAddress">确定</a>
                     <a href="JavaScript:void(0)" class="delClose" @click="showWin">取消</a>
                 </div>
